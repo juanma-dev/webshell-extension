@@ -28,6 +28,7 @@ The shortcut can be changed at `chrome://extensions/shortcuts`.
 | `attr <name>` | extract an attribute | `ls img \| attr src` |
 | `links [sel]` | all URLs on the page | `links nav` |
 | `extract <sel>` | tables → rows, lists → items, `a` → text+URL, `img` → alt+src | `extract a \| to-csv > links.csv` |
+| `uniq` | remove duplicates from the pipe | `extract a \| uniq` |
 | `to-csv` | convert the pipe to CSV | `extract table \| to-csv > data.csv` |
 | `to-json` | convert the pipe to JSON | `links \| to-json > urls.json` |
 | `download <file>` | download the pipe as a file | `text p \| download notes.txt` |

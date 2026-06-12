@@ -193,6 +193,23 @@
     },
   };
 
+  commands.uniq = {
+    desc: "remove duplicate items from the pipe (by text)",
+    usage: "extract a | uniq | to-csv > data.csv",
+    fn(_args, input, term) {
+      if (!input) throw new Error("uniq: needs a pipe");
+      const seen = new Set();
+      const out = input.filter((item) => {
+        const key = WS.itemText(item);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      term.print(`${out.length} unique item(s) (${input.length - out.length} duplicates removed)`);
+      return out;
+    },
+  };
+
   // ---------- DOM manipulation ----------
 
   commands.click = {
