@@ -27,14 +27,20 @@
 
     let node = el;
     let selector = cssPart(el);
-    for (let depth = 0; depth < 4; depth++) {
+    const candidates = [];
+    for (let depth = 0; depth < 5; depth++) {
       const count = document.querySelectorAll(selector).length;
+      candidates.push({ selector, count });
       if (count === 1) return { selector, count };
       node = node.parentElement;
       if (!node || node === document.documentElement || node === document.body) break;
       selector = cssPart(node) + " > " + selector;
     }
-    return { selector, count: document.querySelectorAll(selector).length };
+    // Sin selector único (el elemento es parte de una lista): los ancestros que
+    // no reducen las coincidencias solo añaden fragilidad. Devuelve el más corto
+    // que captura el mismo conjunto final.
+    const finalCount = candidates[candidates.length - 1].count;
+    return candidates.find((c) => c.count === finalCount);
   };
 
   let active = false;
