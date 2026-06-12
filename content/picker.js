@@ -3,12 +3,26 @@
 "use strict";
 
 (function (WS) {
-  /** Selector part for an element: tag + up to 2 "stable" classes. */
+  /** True for class names that look machine-generated (css-in-js hashes like
+      r-j5o65s, css-1dbjc4n, styles-module__x__nkA_U): any dash/underscore
+      token of 5+ chars mixing letters and digits. */
+  function looksGenerated(cls) {
+    return cls
+      .split(/[-_]+/)
+      .some((tok) => tok.length >= 5 && /\d/.test(tok) && /[a-z]/i.test(tok));
+  }
+
+  /** Selector part for an element: stable test attribute, or tag + up to 2 stable classes. */
   function cssPart(el) {
-    let part = el.tagName.toLowerCase();
+    const tag = el.tagName.toLowerCase();
+    // Modern sites (X, etc.) ship stable hooks for their own tests — best anchor there is.
+    for (const attr of ["data-testid", "data-test", "data-qa"]) {
+      const v = el.getAttribute(attr);
+      if (v) return `${tag}[${attr}="${v.replace(/"/g, '\\"')}"]`;
+    }
+    let part = tag;
     const classes = Array.from(el.classList)
-      // Skip classes that look generated (hashes, css-in-js, odd utilities).
-      .filter((c) => /^[A-Za-z][A-Za-z0-9_-]{1,29}$/.test(c) && !/\d{3,}/.test(c))
+      .filter((c) => /^[A-Za-z][A-Za-z0-9_-]{1,29}$/.test(c) && !looksGenerated(c))
       .slice(0, 2);
     if (classes.length) part += "." + classes.map((c) => CSS.escape(c)).join(".");
     return part;
