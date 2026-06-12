@@ -319,6 +319,16 @@
     },
   };
 
+  commands.pick = {
+    desc: "haz clic en un elemento de la página para obtener su selector CSS",
+    usage: "pick   (Esc para cancelar)",
+    fn(_args, _input, term) {
+      term.print("pick: haz clic en un elemento de la página (Esc cancela)…");
+      WS.startPicker(term);
+      return [];
+    },
+  };
+
   commands.clear = {
     desc: "limpia la pantalla de la terminal",
     usage: "clear",

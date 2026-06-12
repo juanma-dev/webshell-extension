@@ -35,6 +35,7 @@ El atajo se puede cambiar en `chrome://extensions/shortcuts`.
 | `fill <sel> "texto"` | rellena inputs | `fill input[name=q] "rust wasm"` |
 | `hide` / `show` / `rm` | oculta / muestra / elimina | `rm .ad-banner` |
 | `css <sel> "estilos"` | aplica CSS inline | `css body "filter: invert(1)"` |
+| `pick` | clic en la página → te da el selector CSS | `pick` (Esc cancela) |
 | `watch <sel> [segs]` | notifica si el texto cambia | `watch .price 30` |
 | `clear` | limpia la terminal | |
 

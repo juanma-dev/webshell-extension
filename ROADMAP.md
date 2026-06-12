@@ -26,8 +26,8 @@ y extraer datos a CSV. Esto es lo que se publica primero en la Chrome Web Store.
 
 ## Fase 2 — Publicación y primeros usuarios (semanas 3-4)
 
+- [x] Comando `pick`: clic en un elemento de la página para obtener su selector
 - [ ] Autocompletado de selectores CSS con Tab
-- [ ] Comando `pick`: clic en un elemento de la página para obtener su selector
 - [ ] Persistir historial de comandos por dominio (`chrome.storage`)
 - [ ] `watch` persistente: sigue funcionando al recargar la página
 - [ ] Página de opciones (atajo de teclado configurable, tema)

@@ -18,6 +18,7 @@ const CONTENT_FILES = [
   "content/dom-utils.js",
   "content/commands.js",
   "content/parser.js",
+  "content/picker.js",
   "content/terminal.js",
 ];
 
