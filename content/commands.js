@@ -9,9 +9,19 @@
   const commands = {};
   WS.commands = commands;
 
-  /** Uses piped elements when present; otherwise queries the selector. */
+  /**
+   * Uses piped elements when present; otherwise queries the selector.
+   * With both, the selector filters the piped elements (ls a | extract "a.Link--primary").
+   */
   function elementsFrom(args, input, name) {
-    if (input && input.length && input[0] instanceof Element) return input;
+    if (input && input.length && input[0] instanceof Element) {
+      if (!args[0]) return input;
+      try {
+        return input.filter((el) => el.matches(args[0]));
+      } catch (e) {
+        throw new Error(`${name}: invalid selector: "${args[0]}"`);
+      }
+    }
     if (!args[0]) throw new Error(`${name}: missing selector. Usage: ${name} <selector>`);
     return WS.query(args[0]);
   }
