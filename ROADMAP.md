@@ -22,7 +22,9 @@ and extract data to CSV. This is what ships first to the Chrome Web Store.
 - [x] Service worker: desktop notifications, on-the-spot injection
 - [x] README with install instructions and command manual
 - [x] i18n: English as default locale, Spanish as second (`_locales/`)
-- [ ] Test on 5 real sites (Amazon, Wikipedia, MercadoLibre, a newspaper, GitHub)
+- [x] Test on 5 real sites (Wikipedia, Amazon, BBC, GitHub, X)
+      Findings fixed: minimal selectors, uniq, pipe filtering, stable test attributes.
+      Known limits: virtualized feeds only expose visible items; card text lands in one cell.
 - [ ] Polish terminal styles (light/dark themes)
 
 ## Phase 2 — Launch and first users (weeks 3-4)
