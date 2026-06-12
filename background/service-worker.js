@@ -1,5 +1,5 @@
 // WebShell — service worker.
-// Notificaciones de `watch`, y apertura de la terminal desde el icono o el atajo (Alt+W).
+// Desktop notifications for `watch`, and opening the terminal from the icon or shortcut (Alt+W).
 "use strict";
 
 chrome.runtime.onMessage.addListener((msg, _sender) => {
@@ -23,14 +23,14 @@ const CONTENT_FILES = [
 ];
 
 /**
- * Abre/cierra la terminal en una pestaña. Si el content script no está
- * (la página se abrió antes de instalar/recargar la extensión), lo inyecta
- * al momento — sin pedirle al usuario que recargue la página.
+ * Toggles the terminal in a tab. If the content script isn't there
+ * (the page was opened before installing/reloading the extension),
+ * inject it on the spot — no page reload needed.
  */
 async function toggleInTab(tab) {
   if (!tab || tab.id == null) return;
   const url = tab.url || "";
-  // Páginas internas del navegador y la Web Store no permiten inyección.
+  // Browser-internal pages and the Web Store don't allow injection.
   if (!/^(https?|file):/.test(url)) return;
 
   try {
@@ -47,7 +47,7 @@ async function toggleInTab(tab) {
       });
       await chrome.tabs.sendMessage(tab.id, { type: "toggle-terminal" });
     } catch (e) {
-      console.warn("WebShell: no se pudo inyectar en la pestaña", tab.id, e);
+      console.warn("WebShell: could not inject into tab", tab.id, e);
     }
   }
 }

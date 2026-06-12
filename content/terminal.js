@@ -1,8 +1,8 @@
-// WebShell — terminal overlay: UI, historial y atajo Ctrl+`.
+// WebShell — terminal overlay: UI, history and the Ctrl+` shortcut.
 "use strict";
 
 (function (WS) {
-  // Evita duplicados si el script se inyecta dos veces (declarado + programático).
+  // Avoid duplicates if the script gets injected twice (declared + programmatic).
   if (WS.terminal) return;
 
   class Terminal {
@@ -13,7 +13,7 @@
     }
 
     build() {
-      // Limpia restos de una carga anterior de la extensión (tras recargarla).
+      // Clean up leftovers from a previous extension load (after reloading it).
       const old = document.getElementById("webshell-root");
       if (old) old.remove();
 
@@ -22,13 +22,13 @@
       this.root.innerHTML = `
         <div id="webshell-bar">
           <span id="webshell-title">webshell — ${location.hostname}</span>
-          <button id="webshell-close" title="Cerrar (Esc)">×</button>
+          <button id="webshell-close" title="Close (Esc)">×</button>
         </div>
         <div id="webshell-output"></div>
         <div id="webshell-prompt-line">
           <span id="webshell-prompt">$</span>
           <input id="webshell-input" type="text" spellcheck="false"
-                 autocomplete="off" placeholder='escribe "help" para empezar' />
+                 autocomplete="off" placeholder='type "help" to get started' />
         </div>`;
       document.documentElement.appendChild(this.root);
 
@@ -37,13 +37,13 @@
 
       this.root.querySelector("#webshell-close").addEventListener("click", () => this.hide());
       this.input.addEventListener("keydown", (e) => this.onKey(e));
-      // Evita que la página capture lo que escribes en la terminal.
+      // Keep the page from capturing what you type in the terminal.
       this.root.addEventListener("keydown", (e) => e.stopPropagation());
       this.root.addEventListener("keyup", (e) => e.stopPropagation());
       this.root.addEventListener("keypress", (e) => e.stopPropagation());
 
-      this.print("WebShell v0.1 — la página es tu sistema de archivos.");
-      this.print('Prueba:  ls a   ·   links   ·   extract table | to-csv > datos.csv');
+      this.print("WebShell v0.1 — the page is your filesystem.");
+      this.print("Try:  ls a   ·   links   ·   extract table | to-csv > data.csv");
       this.built = true;
     }
 
@@ -127,7 +127,7 @@
   const term = new Terminal();
   WS.terminal = term;
 
-  // Ctrl+` (backquote) abre/cierra la terminal en cualquier página.
+  // Ctrl+` (backquote) toggles the terminal on any page.
   window.addEventListener(
     "keydown",
     (e) => {
@@ -139,7 +139,7 @@
     true
   );
 
-  // El icono de la extensión también la abre (mensaje desde el service worker).
+  // The extension icon also opens it (message from the service worker).
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg && msg.type === "toggle-terminal") term.toggle();
   });

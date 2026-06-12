@@ -1,79 +1,81 @@
 # WebShell
 
-> Una terminal estilo Unix dentro de cualquier página web.
-> El DOM es tu sistema de archivos: lista, filtra, extrae a CSV, modifica y vigila con comandos.
+> A Unix-style terminal inside any webpage.
+> The DOM is your filesystem: list, filter, extract to CSV, modify and watch — with shell commands.
 
-## Instalación (modo desarrollador)
+## Install (developer mode)
 
-1. Abre Chrome y ve a `chrome://extensions`
-2. Activa **Modo de desarrollador** (esquina superior derecha)
-3. Clic en **Cargar extensión sin empaquetar** y elige esta carpeta
-4. Abre cualquier página web y presiona **Alt+W** o haz clic en el icono de la extensión
-   (también funciona **`` Ctrl+` ``** en teclados con esa tecla)
+1. Open Chrome and go to `chrome://extensions`
+2. Enable **Developer mode** (top-right corner)
+3. Click **Load unpacked** and pick this folder
+4. Open any webpage and press **Alt+W** or click the extension icon
+   (**`` Ctrl+` ``** also works on keyboards that have that key)
 
-El atajo se puede cambiar en `chrome://extensions/shortcuts`.
+The shortcut can be changed at `chrome://extensions/shortcuts`.
 
-> Si modificas el código: recarga la extensión en `chrome://extensions` (flecha circular).
-> No hace falta recargar las páginas — el icono inyecta la terminal automáticamente.
+> If you edit the code: reload the extension at `chrome://extensions` (circular arrow).
+> No need to reload pages — the icon injects the terminal automatically.
 
-## Comandos
+## Commands
 
-| Comando | Qué hace | Ejemplo |
+| Command | What it does | Example |
 |---|---|---|
-| `help` | lista todos los comandos | `help grep` |
-| `ls <sel>` | lista elementos por selector CSS | `ls .product-card` |
-| `grep <patrón> [sel]` | filtra por texto (regex) | `ls h2 \| grep oferta` |
-| `count` | cuenta items | `ls img \| count` |
-| `text <sel>` | extrae el texto | `text h1` |
-| `attr <nombre>` | extrae un atributo | `ls img \| attr src` |
-| `links [sel]` | todas las URLs de la página | `links nav` |
-| `extract <sel>` | tablas → filas, listas → items, `a` → texto+URL, `img` → alt+src | `extract a \| to-csv > enlaces.csv` |
-| `to-csv` | convierte el pipe a CSV | `extract table \| to-csv > datos.csv` |
-| `to-json` | convierte el pipe a JSON | `links \| to-json > urls.json` |
-| `download <archivo>` | descarga el pipe como archivo | `text p \| download notas.txt` |
-| `click <sel>` | hace clic en elementos | `click .load-more` |
-| `fill <sel> "texto"` | rellena inputs | `fill input[name=q] "rust wasm"` |
-| `hide` / `show` / `rm` | oculta / muestra / elimina | `rm .ad-banner` |
-| `css <sel> "estilos"` | aplica CSS inline | `css body "filter: invert(1)"` |
-| `pick` | clic en la página → te da el selector CSS | `pick` (Esc cancela) |
-| `watch <sel> [segs]` | notifica si el texto cambia | `watch .price 30` |
-| `clear` | limpia la terminal | |
+| `help` | list all commands | `help grep` |
+| `ls <sel>` | list elements by CSS selector | `ls .product-card` |
+| `grep <pattern> [sel]` | filter by text (regex) | `ls h2 \| grep sale` |
+| `count` | count items | `ls img \| count` |
+| `text <sel>` | extract text | `text h1` |
+| `attr <name>` | extract an attribute | `ls img \| attr src` |
+| `links [sel]` | all URLs on the page | `links nav` |
+| `extract <sel>` | tables → rows, lists → items, `a` → text+URL, `img` → alt+src | `extract a \| to-csv > links.csv` |
+| `to-csv` | convert the pipe to CSV | `extract table \| to-csv > data.csv` |
+| `to-json` | convert the pipe to JSON | `links \| to-json > urls.json` |
+| `download <file>` | download the pipe as a file | `text p \| download notes.txt` |
+| `click <sel>` | click elements | `click .load-more` |
+| `fill <sel> "text"` | fill inputs | `fill input[name=q] "rust wasm"` |
+| `hide` / `show` / `rm` | hide / show / remove | `rm .ad-banner` |
+| `css <sel> "styles"` | apply inline CSS | `css body "filter: invert(1)"` |
+| `pick` | click the page → get the CSS selector | `pick` (Esc cancels) |
+| `watch <sel> [secs]` | notify when text changes | `watch .price 30` |
+| `clear` | clear the terminal | |
 
-### Pipes y redirección
+### Pipes and redirection
 
-Los comandos se encadenan con `|` como en bash, y `> archivo` descarga el resultado:
-
-```
-extract table.precios | to-csv > precios.csv
-ls a | grep "descargar" | attr href | download enlaces.txt
-ls h2 | grep -ofertas | count
-```
-
-### Recetas útiles
+Commands chain with `|` like in bash, and `> file` downloads the result:
 
 ```
-links | grep linkedin > perfiles.txt        # extraer enlaces filtrados
-watch .stock-status 60                      # avisa si vuelve a haber stock
-rm .modal, .overlay, .cookie-banner         # limpiar una página molesta
-extract ul.results | to-csv > resultados.csv
+extract table.prices | to-csv > prices.csv
+ls a | grep "download" | attr href | download links.txt
+ls h2 | grep deals | count
 ```
 
-## Estructura del proyecto
+### Handy recipes
+
+```
+links | grep linkedin > profiles.txt        # extract filtered links
+watch .stock-status 60                      # alert when back in stock
+rm .modal, .overlay, .cookie-banner         # clean up an annoying page
+extract ul.results | to-csv > results.csv
+```
+
+## Project structure
 
 ```
 manifest.json                  Manifest V3
+_locales/                      i18n (en default, es)
 content/
-  dom-utils.js                 selección, extracción, CSV, descargas
-  commands.js                  registro de comandos del shell
-  parser.js                    tokenizador, pipes, redirección
-  terminal.js                  UI de la terminal, historial, atajo Ctrl+`
-  terminal.css                 estilos del overlay
+  dom-utils.js                 selection, extraction, CSV, downloads
+  commands.js                  shell command registry
+  parser.js                    tokenizer, pipes, redirection
+  picker.js                    click → CSS selector
+  terminal.js                  terminal UI, history, shortcuts
+  terminal.css                 overlay styles
 background/
-  service-worker.js            notificaciones de escritorio (watch)
-icons/                         iconos 16/48/128
+  service-worker.js            desktop notifications (watch), injection
+icons/                         16/48/128 icons
 ```
 
 ## Roadmap
 
-Ver [ROADMAP.md](ROADMAP.md) — fases, monetización y dónde entra Rust
-(host de Native Messaging y módulos WASM).
+See [ROADMAP.md](ROADMAP.md) — phases, monetization, and where Rust comes in
+(Native Messaging host and WASM modules).

@@ -1,5 +1,5 @@
-/* WebShell — estilos de la terminal overlay.
-   Todo bajo #webshell-root con valores explícitos para no heredar de la página. */
+/* WebShell — terminal overlay styles.
+   Everything under #webshell-root with explicit values to avoid inheriting from the page. */
 
 #webshell-root {
   display: none;

@@ -1,20 +1,20 @@
-// WebShell — utilidades DOM compartidas.
-// Se carga primero; crea el namespace global del content script.
+// WebShell — shared DOM utilities.
+// Loaded first; creates the content script's global namespace.
 "use strict";
 
 window.WebShell = window.WebShell || {};
 
 (function (WS) {
-  /** Busca elementos por selector CSS. Lanza error legible si el selector es inválido. */
+  /** Queries elements by CSS selector. Throws a readable error if invalid. */
   WS.query = function (selector) {
     try {
       return Array.from(document.querySelectorAll(selector));
     } catch (e) {
-      throw new Error(`selector inválido: "${selector}"`);
+      throw new Error(`invalid selector: "${selector}"`);
     }
   };
 
-  /** Descripción corta de un elemento: etiqueta, id, clases y texto recortado. */
+  /** Short description of an element: tag, id, classes and trimmed text. */
   WS.describe = function (el) {
     const id = el.id ? `#${el.id}` : "";
     const cls = el.classList.length
@@ -24,19 +24,19 @@ window.WebShell = window.WebShell || {};
     return `<${el.tagName.toLowerCase()}${id}${cls}> ${text}`;
   };
 
-  /** Recorta texto colapsando espacios en blanco. */
+  /** Trims text, collapsing whitespace. */
   WS.snippet = function (text, max) {
     const clean = (text || "").replace(/\s+/g, " ").trim();
     return clean.length > max ? clean.slice(0, max - 1) + "…" : clean;
   };
 
   /**
-   * Extrae datos estructurados de un elemento, según su tipo.
-   * - <table>  → array de filas (array de celdas)
-   * - <ul>/<ol> → una fila por <li>
-   * - <a>      → [texto, href]
+   * Extracts structured data from an element, by type.
+   * - <table>  → array of rows (arrays of cells)
+   * - <ul>/<ol> → one row per <li>
+   * - <a>      → [text, href]
    * - <img>    → [alt, src]
-   * - otro     → una fila con su texto
+   * - other    → one row with its text
    */
   WS.extract = function (el) {
     const tag = el.tagName.toLowerCase();
@@ -63,7 +63,7 @@ window.WebShell = window.WebShell || {};
     return [[WS.snippet(el.textContent, 500)]];
   };
 
-  /** Convierte filas (array de arrays) a CSV con escapado RFC 4180. */
+  /** Converts rows (array of arrays) to CSV with RFC 4180 escaping. */
   WS.toCSV = function (rows) {
     const escape = (v) => {
       const s = String(v == null ? "" : v);
@@ -72,7 +72,7 @@ window.WebShell = window.WebShell || {};
     return rows.map((row) => row.map(escape).join(",")).join("\r\n");
   };
 
-  /** Descarga un texto como archivo usando Blob + <a download> (sin permisos extra). */
+  /** Downloads text as a file via Blob + <a download> (no extra permissions). */
   WS.downloadFile = function (filename, content, mime) {
     const blob = new Blob([content], { type: mime || "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -85,7 +85,7 @@ window.WebShell = window.WebShell || {};
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   };
 
-  /** Normaliza la salida de un comando a filas para CSV/JSON. */
+  /** Normalizes command output to rows for CSV/JSON. */
   WS.toRows = function (items) {
     return items.map((item) => {
       if (Array.isArray(item)) return item;
@@ -94,7 +94,7 @@ window.WebShell = window.WebShell || {};
     });
   };
 
-  /** Texto plano de un item de pipeline (elemento, fila o string). */
+  /** Plain text of a pipeline item (element, row or string). */
   WS.itemText = function (item) {
     if (item instanceof Element) return WS.snippet(item.textContent, 500);
     if (Array.isArray(item)) return item.join(" | ");

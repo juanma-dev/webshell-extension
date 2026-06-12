@@ -1,13 +1,13 @@
-// WebShell — picker: clic sobre cualquier elemento de la página → selector CSS.
-// La terminal se oculta durante la selección y reaparece con el selector listo.
+// WebShell — picker: click any element on the page → CSS selector.
+// The terminal hides while picking and reappears with the selector ready.
 "use strict";
 
 (function (WS) {
-  /** Parte de selector para un elemento: tag + hasta 2 clases "estables". */
+  /** Selector part for an element: tag + up to 2 "stable" classes. */
   function cssPart(el) {
     let part = el.tagName.toLowerCase();
     const classes = Array.from(el.classList)
-      // Descarta clases que parecen generadas (hashes, css-in-js, utilitarias raras).
+      // Skip classes that look generated (hashes, css-in-js, odd utilities).
       .filter((c) => /^[A-Za-z][A-Za-z0-9_-]{1,29}$/.test(c) && !/\d{3,}/.test(c))
       .slice(0, 2);
     if (classes.length) part += "." + classes.map((c) => CSS.escape(c)).join(".");
@@ -15,9 +15,9 @@
   }
 
   /**
-   * Calcula un selector para el elemento. Prefiere id único; si no,
-   * sube por los padres hasta que el selector sea único o se acabe la paciencia.
-   * Devuelve { selector, count } — count > 1 es útil para extraer listas.
+   * Computes a selector for the element. Prefers a unique id; otherwise
+   * climbs the ancestors until the selector is unique or patience runs out.
+   * Returns { selector, count } — count > 1 is useful for extracting lists.
    */
   WS.selectorFor = function (el) {
     if (el.id && /^[A-Za-z][\w-]*$/.test(el.id)) {
@@ -36,9 +36,9 @@
       if (!node || node === document.documentElement || node === document.body) break;
       selector = cssPart(node) + " > " + selector;
     }
-    // Sin selector único (el elemento es parte de una lista): los ancestros que
-    // no reducen las coincidencias solo añaden fragilidad. Devuelve el más corto
-    // que captura el mismo conjunto final.
+    // No unique selector (the element is part of a list): ancestors that don't
+    // reduce the match count only add fragility. Return the shortest selector
+    // that captures the same final set.
     const finalCount = candidates[candidates.length - 1].count;
     return candidates.find((c) => c.count === finalCount);
   };
@@ -89,7 +89,7 @@
       stop();
       const term = WS.terminal;
       term.toggle();
-      term.print("pick: cancelado");
+      term.print("pick: cancelled");
     }
   }
 
@@ -105,17 +105,17 @@
     term.toggle();
     term.print(`selector: ${selector}`);
     if (count === 1) {
-      term.print("coincide con 1 elemento (exacto)");
+      term.print("matches 1 element (exact)");
     } else {
-      term.print(`coincide con ${count} elementos — ideal para extraer la lista completa`);
+      term.print(`matches ${count} elements — great for extracting the whole list`);
     }
-    // Deja un comando listo en el prompt para que solo presione Enter.
+    // Leave a ready-to-run command in the prompt; just press Enter.
     const suggestion = el.tagName === "TABLE" || count > 1 ? "extract" : "text";
     term.input.value = `${suggestion} "${selector}"`;
     term.input.focus();
   }
 
-  /** Activa el modo selección. Lo invoca el comando `pick`. */
+  /** Enables pick mode. Invoked by the `pick` command. */
   WS.startPicker = function (term) {
     if (active) return;
     active = true;

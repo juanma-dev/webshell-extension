@@ -1,0 +1,18 @@
+{
+  "appName": {
+    "message": "WebShell — terminal, scraper y CSV para cualquier página",
+    "description": "Nombre de la extensión en la Web Store y chrome://extensions"
+  },
+  "appDesc": {
+    "message": "Una terminal estilo Unix dentro de cualquier página web: extrae datos a CSV, manipula el DOM y vigila cambios con comandos y pipes.",
+    "description": "Descripción de la extensión"
+  },
+  "actionTitle": {
+    "message": "WebShell — abre la terminal (Alt+W)",
+    "description": "Tooltip del icono en la barra"
+  },
+  "toggleCommandDesc": {
+    "message": "Abrir/cerrar la terminal WebShell",
+    "description": "Descripción del atajo de teclado"
+  }
+}

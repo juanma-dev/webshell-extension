@@ -1,78 +1,80 @@
-# WebShell — Roadmap del proyecto
+# WebShell — Project Roadmap
 
-> Terminal Unix donde el sitio web es el sistema de archivos.
-> Marca con `[x]` lo que se va completando.
-
----
-
-## Fase 1 — MVP: la terminal que funciona hoy (semanas 1-2)
-
-**Objetivo:** cargar la extensión en Chrome, abrir la terminal en cualquier página
-y extraer datos a CSV. Esto es lo que se publica primero en la Chrome Web Store.
-
-- [x] Estructura del proyecto y `manifest.json` (Manifest V3)
-- [x] Iconos de la extensión (16/48/128 px)
-- [x] Utilidades DOM: selección por CSS, extracción de tablas/listas, generador CSV
-- [x] Parser de comandos: tokenizador con comillas, pipes `|`, redirección `> archivo`
-- [x] Comandos básicos: `help`, `ls`, `grep`, `count`, `text`, `attr`, `links`
-- [x] Extracción: `extract`, `to-csv`, `to-json`, `download`
-- [x] Manipulación DOM: `click`, `hide`, `show`, `rm`, `css`, `fill`
-- [x] Monitor: `watch <selector>` con notificación de escritorio al cambiar
-- [x] Terminal overlay: toggle con `` Ctrl+` ``, historial con flechas, autoscroll
-- [x] Service worker: notificaciones de escritorio
-- [x] README con instalación y manual de comandos
-- [ ] Probar en 5 sitios reales (Amazon, Wikipedia, MercadoLibre, un periódico, GitHub)
-- [ ] Pulir estilos de la terminal (temas claro/oscuro)
-
-## Fase 2 — Publicación y primeros usuarios (semanas 3-4)
-
-- [x] Comando `pick`: clic en un elemento de la página para obtener su selector
-- [ ] Autocompletado de selectores CSS con Tab
-- [ ] Persistir historial de comandos por dominio (`chrome.storage`)
-- [ ] `watch` persistente: sigue funcionando al recargar la página
-- [ ] Página de opciones (atajo de teclado configurable, tema)
-- [ ] Cuenta de desarrollador Chrome Web Store ($5 USD, pago único)
-- [ ] Capturas, video demo de 30s, descripción de la ficha
-- [ ] Publicar versión gratuita en la Chrome Web Store
-- [ ] Landing page simple (GitHub Pages sirve para empezar)
-- [ ] Anunciar en Reddit (r/webdev, r/chrome_extensions), X, Product Hunt
-
-## Fase 3 — Monetización: Native Messaging con Rust (mes 2)
-
-**Aquí entra Rust.** Host nativo que la extensión instala para tocar el sistema real.
-
-- [ ] Host de Native Messaging en Rust (binario único, protocolo stdin/stdout)
-- [ ] Instalador del host (script + registro en Windows / manifest en disco)
-- [ ] Comando `sh <script>`: ejecutar comandos del sistema desde la terminal web
-- [ ] Pipe hacia el sistema: `extract tabla | sh procesar.sh`
-- [ ] Guardar archivos directamente en disco (no solo Descargas)
-- [ ] Sistema de licencias Pro (ExtensionPay o LemonSqueezy)
-- [ ] Gate de funciones Pro: native messaging, watches ilimitados
-- [ ] Precio: Free / Pro $8 USD/mes / Lifetime $129 USD
-
-## Fase 4 — Diferenciadores (mes 3+)
-
-- [ ] Macros: grabar clics/inputs y reproducirlos como script editable
-- [ ] Scheduler: `cron "0 9 * * *" 'watch .precio'` (alarms + service worker)
-- [ ] Módulo WASM en Rust: parseo/regex de alto volumen para páginas gigantes
-- [ ] Capa IA: lenguaje natural → comando (`"saca todos los emails"`)
-- [ ] Webhooks: `watch .precio --webhook https://...`
-
-## Fase 5 — Escala (mes 6+)
-
-- [ ] Marketplace de scripts comunitarios (con comisión)
-- [ ] Plan Teams: scripts compartidos ($15/usuario/mes)
-- [ ] Sincronización de scripts entre dispositivos
-- [ ] Versión Firefox/Edge
+> A Unix-style terminal where the website is the filesystem.
+> Check items off with `[x]` as they get done.
 
 ---
 
-## Decisiones técnicas tomadas
+## Phase 1 — MVP: the terminal that works today (weeks 1-2)
 
-| Decisión | Elección | Por qué |
+**Goal:** load the extension in Chrome, open the terminal on any page
+and extract data to CSV. This is what ships first to the Chrome Web Store.
+
+- [x] Project structure and `manifest.json` (Manifest V3)
+- [x] Extension icons (16/48/128 px)
+- [x] DOM utilities: CSS selection, table/list extraction, CSV generator
+- [x] Command parser: quote-aware tokenizer, pipes `|`, redirection `> file`
+- [x] Basic commands: `help`, `ls`, `grep`, `count`, `text`, `attr`, `links`
+- [x] Extraction: `extract`, `to-csv`, `to-json`, `download`
+- [x] DOM manipulation: `click`, `hide`, `show`, `rm`, `css`, `fill`
+- [x] Monitor: `watch <selector>` with desktop notification on change
+- [x] Terminal overlay: toggle with Alt+W / `` Ctrl+` ``, arrow-key history, autoscroll
+- [x] Service worker: desktop notifications, on-the-spot injection
+- [x] README with install instructions and command manual
+- [x] i18n: English as default locale, Spanish as second (`_locales/`)
+- [ ] Test on 5 real sites (Amazon, Wikipedia, MercadoLibre, a newspaper, GitHub)
+- [ ] Polish terminal styles (light/dark themes)
+
+## Phase 2 — Launch and first users (weeks 3-4)
+
+- [x] `pick` command: click an element on the page to get its selector
+- [ ] CSS selector autocomplete with Tab
+- [ ] Persist command history per domain (`chrome.storage`)
+- [ ] Persistent `watch`: keeps working across page reloads
+- [ ] Options page (configurable shortcut, theme)
+- [ ] Chrome Web Store developer account ($5 USD, one-time)
+- [ ] Screenshots, 30s demo video, store listing copy
+- [ ] Publish the free version to the Chrome Web Store
+- [ ] Simple landing page (GitHub Pages is fine to start)
+- [ ] Announce on Reddit (r/webdev, r/chrome_extensions), X, Product Hunt
+
+## Phase 3 — Monetization: Native Messaging with Rust (month 2)
+
+**This is where Rust comes in.** A native host the extension installs to touch the real system.
+
+- [ ] Native Messaging host in Rust (single binary, stdin/stdout protocol)
+- [ ] Host installer (script + Windows registry / manifest on disk)
+- [ ] `sh <script>` command: run system commands from the web terminal
+- [ ] Pipe to the system: `extract table | sh process.sh`
+- [ ] Save files directly to disk (not just Downloads)
+- [ ] Pro licensing system (ExtensionPay or LemonSqueezy)
+- [ ] Pro feature gate: native messaging, unlimited watches
+- [ ] Pricing: Free / Pro $8 USD/mo / Lifetime $129 USD
+
+## Phase 4 — Differentiators (month 3+)
+
+- [ ] Macros: record clicks/inputs and replay them as an editable script
+- [ ] Scheduler: `cron "0 9 * * *" 'watch .price'` (alarms + service worker)
+- [ ] Rust WASM module: high-volume parsing/regex for huge pages
+- [ ] AI layer: natural language → command (`"get all the emails"`)
+- [ ] Webhooks: `watch .price --webhook https://...`
+
+## Phase 5 — Scale (month 6+)
+
+- [ ] Community script marketplace (with commission)
+- [ ] Teams plan: shared scripts ($15/user/mo)
+- [ ] Script sync across devices
+- [ ] Firefox/Edge version
+
+---
+
+## Technical decisions
+
+| Decision | Choice | Why |
 |---|---|---|
-| Lenguaje de la extensión | JavaScript puro, sin bundler | El navegador solo ejecuta JS; sin build = cargar y probar al instante |
-| Dónde entra Rust | Host nativo (fase 3) y WASM (fase 4) | Binario único sin dependencias; velocidad para procesamiento pesado |
-| Manifest | V3 | V2 está muerto en Chrome Web Store |
-| Descarga de archivos | Blob + `<a download>` | No requiere permiso `downloads` |
-| Pagos | ExtensionPay / LemonSqueezy | No requieren backend propio |
+| Extension language | Plain JavaScript, no bundler | The browser only runs JS; no build = load and test instantly |
+| Where Rust fits | Native host (phase 3) and WASM (phase 4) | Single dependency-free binary; speed for heavy processing |
+| Manifest | V3 | V2 is dead on the Chrome Web Store |
+| File downloads | Blob + `<a download>` | No `downloads` permission needed |
+| Payments | ExtensionPay / LemonSqueezy | No own backend required |
+| i18n | `default_locale: en`, Spanish second | English market is ~10x; store falls back to the default locale |

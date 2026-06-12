@@ -1,10 +1,10 @@
-// WebShell — parser: tokeniza respetando comillas, separa pipes y redirección.
-//   extract table | to-csv > datos.csv
-//   → [{cmd:"extract", args:["table"]}, {cmd:"to-csv", args:[]}] + redirect "datos.csv"
+// WebShell — parser: tokenizes (quote-aware), splits pipes and redirection.
+//   extract table | to-csv > data.csv
+//   → [{cmd:"extract", args:["table"]}, {cmd:"to-csv", args:[]}] + redirect "data.csv"
 "use strict";
 
 (function (WS) {
-  /** Divide una línea en tokens. Las comillas (simples o dobles) agrupan. */
+  /** Splits a line into tokens. Quotes (single or double) group. */
   function tokenize(line) {
     const tokens = [];
     let current = "";
@@ -35,14 +35,14 @@
         current += ch;
       }
     }
-    if (quote) throw new Error("falta cerrar una comilla");
+    if (quote) throw new Error("unclosed quote");
     if (current) tokens.push(current);
     return tokens;
   }
 
   /**
-   * Parsea una línea completa.
-   * Devuelve { stages: [{cmd, args}], redirect: string|null }
+   * Parses a full line.
+   * Returns { stages: [{cmd, args}], redirect: string|null }
    */
   WS.parse = function (line) {
     const tokens = tokenize(line);
@@ -55,11 +55,11 @@
 
     for (const tok of tokens) {
       if (expectRedirect) {
-        if (redirect) throw new Error("solo se permite una redirección >");
+        if (redirect) throw new Error("only one > redirection allowed");
         redirect = tok;
         expectRedirect = false;
       } else if (tok === "|") {
-        if (!current) throw new Error("pipe sin comando antes de |");
+        if (!current) throw new Error("pipe with no command before |");
         stages.push(current);
         current = null;
       } else if (tok === ">") {
@@ -70,14 +70,14 @@
         current.args.push(tok);
       }
     }
-    if (expectRedirect) throw new Error("falta el nombre de archivo después de >");
+    if (expectRedirect) throw new Error("missing filename after >");
     if (current) stages.push(current);
-    if (!stages.length && redirect) throw new Error("redirección sin comando");
+    if (!stages.length && redirect) throw new Error("redirection with no command");
 
     return { stages, redirect };
   };
 
-  /** Ejecuta una línea completa contra el registro de comandos. */
+  /** Runs a full line against the command registry. */
   WS.run = function (line, term) {
     const { stages, redirect } = WS.parse(line);
     if (!stages.length) return;
@@ -86,13 +86,13 @@
     for (const { cmd, args } of stages) {
       const command = WS.commands[cmd];
       if (!command) {
-        throw new Error(`comando no encontrado: "${cmd}" (escribe "help")`);
+        throw new Error(`command not found: "${cmd}" (type "help")`);
       }
       pipe = command.fn(args, pipe, term);
     }
 
     if (redirect) {
-      if (!pipe || !pipe.length) throw new Error("> nada que guardar: el pipe está vacío");
+      if (!pipe || !pipe.length) throw new Error("> nothing to save: the pipe is empty");
       const content = pipe.map((i) => WS.itemText(i)).join("\n");
       const mime = redirect.endsWith(".csv")
         ? "text/csv;charset=utf-8"
@@ -100,7 +100,7 @@
         ? "application/json"
         : "text/plain;charset=utf-8";
       WS.downloadFile(redirect, content, mime);
-      term.print(`guardado: ${redirect}`);
+      term.print(`saved: ${redirect}`);
     }
   };
 })(window.WebShell);
