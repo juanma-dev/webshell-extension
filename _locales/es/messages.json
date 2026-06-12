@@ -4,7 +4,7 @@
     "description": "Nombre de la extensión en la Web Store y chrome://extensions"
   },
   "appDesc": {
-    "message": "Una terminal estilo Unix dentro de cualquier página web: extrae datos a CSV, manipula el DOM y vigila cambios con comandos y pipes.",
+    "message": "Una terminal estilo Unix en cualquier página: extrae datos a CSV, manipula el DOM y vigila cambios con comandos y pipes.",
     "description": "Descripción de la extensión"
   },
   "actionTitle": {
