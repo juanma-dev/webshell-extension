@@ -1,0 +1,8 @@
+# Paquetes y artefactos
+*.zip
+*.crx
+*.pem
+
+# Sistema
+Thumbs.db
+.DS_Store

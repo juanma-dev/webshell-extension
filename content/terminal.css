@@ -1,0 +1,103 @@
+/* WebShell — estilos de la terminal overlay.
+   Todo bajo #webshell-root con valores explícitos para no heredar de la página. */
+
+#webshell-root {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42vh;
+  z-index: 2147483647;
+  flex-direction: column;
+  background: rgba(18, 20, 26, 0.97);
+  color: #e6e6e6;
+  font-family: Consolas, "Cascadia Code", Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  border-top: 2px solid #50fa7b;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.45);
+  text-align: left;
+}
+
+#webshell-root.webshell-open {
+  display: flex;
+}
+
+#webshell-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex: 0 0 auto;
+}
+
+#webshell-title {
+  color: #8be9fd;
+  font-size: 12px;
+}
+
+#webshell-close {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+#webshell-close:hover {
+  color: #ff5555;
+}
+
+#webshell-output {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+.webshell-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.webshell-cmd {
+  color: #50fa7b;
+  margin-top: 6px;
+}
+
+.webshell-error {
+  color: #ff5555;
+}
+
+#webshell-prompt-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex: 0 0 auto;
+}
+
+#webshell-prompt {
+  color: #50fa7b;
+  font-weight: bold;
+}
+
+#webshell-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e6e6e6;
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: #50fa7b;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
