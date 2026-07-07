@@ -77,8 +77,9 @@
     return { stages, redirect };
   };
 
-  /** Runs a full line against the command registry. */
-  WS.run = function (line, term) {
+  /** Runs a full line against the command registry. Commands may be async
+      (ping/curl go through the service worker), so the pipeline awaits each stage. */
+  WS.run = async function (line, term) {
     const { stages, redirect } = WS.parse(line);
     if (!stages.length) return;
 
@@ -88,7 +89,7 @@
       if (!command) {
         throw new Error(`command not found: "${cmd}" (type "help")`);
       }
-      pipe = command.fn(args, pipe, term);
+      pipe = await command.fn(args, pipe, term);
     }
 
     if (redirect) {
