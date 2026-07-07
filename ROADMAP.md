@@ -65,6 +65,8 @@ Everything below ships without asking for new permissions.
       — raw TCP/ICMP sockets don't exist in the extension sandbox; the Rust host unlocks them
 - [ ] Pipe to the system: `extract table | sh process.sh`
 - [ ] Save files directly to disk (not just Downloads)
+- [ ] Split repos: this one stays public (PolyForm Shield 1.0.0); a private
+      `webshell-pro` repo hosts the Rust native host, license checks and payments
 - [ ] Pro licensing system (ExtensionPay or LemonSqueezy)
 - [ ] Pro feature gate: native messaging, unlimited watches
 - [ ] Pricing: Free / Pro $8 USD/mo / Lifetime $129 USD
@@ -96,3 +98,4 @@ Everything below ships without asking for new permissions.
 | File downloads | Blob + `<a download>` | No `downloads` permission needed |
 | Payments | ExtensionPay / LemonSqueezy | No own backend required |
 | i18n | `default_locale: en`, Spanish second | English market is ~10x; store falls back to the default locale |
+| License | PolyForm Shield 1.0.0 | Public repo builds trust (auditable privacy) and distribution; the Noncompete clause blocks store clones; Pro goes in a private repo |

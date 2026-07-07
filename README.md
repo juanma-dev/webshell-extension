@@ -100,3 +100,14 @@ icons/                         16/48/128 icons
 
 See [ROADMAP.md](ROADMAP.md) — phases, monetization, and where Rust comes in
 (Native Messaging host and WASM modules).
+
+## License
+
+Source-available under the [PolyForm Shield License 1.0.0](LICENSE.md): read it,
+learn from it, open issues and PRs — but you may not ship a product that
+competes with WebShell (republishing it as another extension counts, even for
+free). The upcoming Pro features (native host, licensing) live in a separate
+private repository.
+
+Required Notice: Copyright Juan Manuel Castellanos Hernandez
+(https://github.com/juanma-dev/webshell-extension)
