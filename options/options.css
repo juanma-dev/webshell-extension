@@ -1,0 +1,96 @@
+/* WebShell — options page. Follows the browser's light/dark scheme. */
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 16px 20px 20px;
+  min-width: 360px;
+  color: #24292f;
+  background: #ffffff;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+#version {
+  color: #888888;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+section {
+  margin-top: 18px;
+}
+
+h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6e6e6e;
+  margin: 0 0 8px;
+}
+
+p {
+  margin: 4px 0 10px;
+  color: #57606a;
+}
+
+label {
+  display: block;
+  margin: 4px 0;
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #c9c9c9;
+  background: #f6f6f6;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+button:hover {
+  background: #ececec;
+}
+
+a {
+  color: #0b6e8a;
+}
+
+#cleared {
+  margin-left: 8px;
+  color: #0a7a3d;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #e6e6e6;
+    background: #17191f;
+  }
+  h2 {
+    color: #9aa0a6;
+  }
+  p {
+    color: #b0b6bf;
+  }
+  button {
+    border-color: #3a3f4a;
+    background: #232732;
+  }
+  button:hover {
+    background: #2b3040;
+  }
+  a {
+    color: #8be9fd;
+  }
+  #cleared {
+    color: #50fa7b;
+  }
+}

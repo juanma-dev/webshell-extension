@@ -14,5 +14,61 @@
   "toggleCommandDesc": {
     "message": "Abrir/cerrar la terminal WebShell",
     "description": "Descripción del atajo de teclado"
+  },
+  "optTheme": {
+    "message": "Tema de la terminal",
+    "description": "Opciones: encabezado de la sección de tema"
+  },
+  "optThemeAuto": {
+    "message": "Auto — según el sistema",
+    "description": "Opciones: radio de tema"
+  },
+  "optThemeDark": {
+    "message": "Oscuro",
+    "description": "Opciones: radio de tema"
+  },
+  "optThemeLight": {
+    "message": "Claro",
+    "description": "Opciones: radio de tema"
+  },
+  "optData": {
+    "message": "Datos guardados",
+    "description": "Opciones: encabezado de la sección de datos"
+  },
+  "optDataHint": {
+    "message": "El historial de comandos y los watches se guardan por sitio, solo en este dispositivo. Nada sale de tu máquina.",
+    "description": "Opciones: nota de la sección de datos"
+  },
+  "optClear": {
+    "message": "Borrar historial y watches (todos los sitios)",
+    "description": "Opciones: botón de borrado"
+  },
+  "optCleared": {
+    "message": "Borrado ✓",
+    "description": "Opciones: confirmación tras borrar"
+  },
+  "optShortcut": {
+    "message": "Atajo de teclado",
+    "description": "Opciones: encabezado de la sección de atajos"
+  },
+  "optShortcutHint": {
+    "message": "Alt+W abre la terminal (Ctrl+` también funciona). Puedes cambiarlo en la configuración de atajos de Chrome:",
+    "description": "Opciones: nota de la sección de atajos"
+  },
+  "optShortcutBtn": {
+    "message": "Configurar atajos",
+    "description": "Opciones: abre chrome://extensions/shortcuts"
+  },
+  "optFeedback": {
+    "message": "Comentarios",
+    "description": "Opciones: encabezado de la sección de comentarios"
+  },
+  "optFeedbackIssues": {
+    "message": "Reporta un error o pide una función",
+    "description": "Opciones: enlace al gestor de issues"
+  },
+  "optFeedbackReview": {
+    "message": "Deja una reseña en la Chrome Web Store",
+    "description": "Opciones: enlace a la ficha de la tienda"
   }
 }

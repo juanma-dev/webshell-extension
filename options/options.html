@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WebShell</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <h1>WebShell <span id="version"></span></h1>
+
+  <section>
+    <h2 data-i18n="optTheme"></h2>
+    <label><input type="radio" name="theme" value="auto"> <span data-i18n="optThemeAuto"></span></label>
+    <label><input type="radio" name="theme" value="dark"> <span data-i18n="optThemeDark"></span></label>
+    <label><input type="radio" name="theme" value="light"> <span data-i18n="optThemeLight"></span></label>
+  </section>
+
+  <section>
+    <h2 data-i18n="optData"></h2>
+    <p data-i18n="optDataHint"></p>
+    <button id="clear" data-i18n="optClear"></button>
+    <span id="cleared" hidden data-i18n="optCleared"></span>
+  </section>
+
+  <section>
+    <h2 data-i18n="optShortcut"></h2>
+    <p data-i18n="optShortcutHint"></p>
+    <button id="shortcuts" data-i18n="optShortcutBtn"></button>
+  </section>
+
+  <section>
+    <h2 data-i18n="optFeedback"></h2>
+    <p>
+      <a id="issues" target="_blank" data-i18n="optFeedbackIssues"></a><br>
+      <a id="review" target="_blank" data-i18n="optFeedbackReview"></a>
+    </p>
+  </section>
+
+  <script src="options.js"></script>
+</body>
+</html>

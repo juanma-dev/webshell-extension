@@ -14,5 +14,61 @@
   "toggleCommandDesc": {
     "message": "Open/close the WebShell terminal",
     "description": "Description of the keyboard shortcut"
+  },
+  "optTheme": {
+    "message": "Terminal theme",
+    "description": "Options: theme section heading"
+  },
+  "optThemeAuto": {
+    "message": "Auto — follow the system",
+    "description": "Options: theme radio"
+  },
+  "optThemeDark": {
+    "message": "Dark",
+    "description": "Options: theme radio"
+  },
+  "optThemeLight": {
+    "message": "Light",
+    "description": "Options: theme radio"
+  },
+  "optData": {
+    "message": "Saved data",
+    "description": "Options: data section heading"
+  },
+  "optDataHint": {
+    "message": "Command history and watches are saved per site, on this device only. Nothing ever leaves your machine.",
+    "description": "Options: data section hint"
+  },
+  "optClear": {
+    "message": "Clear history & watches (all sites)",
+    "description": "Options: clear data button"
+  },
+  "optCleared": {
+    "message": "Cleared ✓",
+    "description": "Options: confirmation after clearing"
+  },
+  "optShortcut": {
+    "message": "Keyboard shortcut",
+    "description": "Options: shortcut section heading"
+  },
+  "optShortcutHint": {
+    "message": "Alt+W opens the terminal (Ctrl+` also works). You can change it in Chrome's shortcut settings:",
+    "description": "Options: shortcut section hint"
+  },
+  "optShortcutBtn": {
+    "message": "Configure shortcuts",
+    "description": "Options: opens chrome://extensions/shortcuts"
+  },
+  "optFeedback": {
+    "message": "Feedback",
+    "description": "Options: feedback section heading"
+  },
+  "optFeedbackIssues": {
+    "message": "Report a bug or request a feature",
+    "description": "Options: link to the issue tracker"
+  },
+  "optFeedbackReview": {
+    "message": "Leave a review on the Chrome Web Store",
+    "description": "Options: link to the store listing"
   }
 }
