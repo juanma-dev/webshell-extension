@@ -6,6 +6,7 @@
 "use strict";
 
 (function (WS) {
+  if (WS.commands) return; // injected twice (declared + programmatic)
   const commands = {};
   WS.commands = commands;
 
@@ -294,14 +295,256 @@
     },
   };
 
+  // ---------- navigation ----------
+
+  /**
+   * Pure resolver for `cd` (kept DOM-free so node can test it).
+   * Returns one of:
+   *   { type: "back" }                          cd -
+   *   { type: "url", url }                      unambiguous destination
+   *   { type: "ambiguous", domainUrl, pathUrl } single word: may be a CSS
+   *     selector on the page, a bare domain, or a relative path — the command
+   *     checks the DOM first, then falls back to domainUrl || pathUrl.
+   */
+  WS.resolveCd = function (arg, currentHref) {
+    const cur = new URL(currentHref);
+    if (!arg || arg === "/") return { type: "url", url: cur.origin + "/" };
+    if (arg === "-") return { type: "back" };
+    if (/^https?:\/\//i.test(arg)) return { type: "url", url: arg };
+    if (arg.startsWith("/")) return { type: "url", url: cur.origin + arg };
+
+    // Filesystem-style walk: cd .. from /a/b lands on /a (one segment per ..).
+    const walk = () => {
+      const segs = cur.pathname.split("/").filter(Boolean);
+      for (const tok of arg.split("/")) {
+        if (tok === "" || tok === ".") continue;
+        if (tok === "..") segs.pop();
+        else segs.push(tok);
+      }
+      return cur.origin + "/" + segs.join("/");
+    };
+
+    if (/^\.\.?(\/|$)/.test(arg)) return { type: "url", url: walk() };
+
+    const domainish = /^[\w-]+(\.[\w-]+)+(:\d+)?(\/[^\s]*)?$/.test(arg);
+    return {
+      type: "ambiguous",
+      domainUrl: domainish ? "https://" + arg : null,
+      pathUrl: walk(),
+    };
+  };
+
+  commands.cd = {
+    desc: "navigate: URL, /path, .., -, or the selector of a link",
+    usage: "cd <url|/path|..|-|selector>   ·   cd (alone) = site root",
+    fn(args, _input, term) {
+      const arg = args[0] || "";
+      const r = WS.resolveCd(arg, location.href);
+      if (r.type === "back") {
+        term.print("cd: going back…");
+        history.back();
+        return [];
+      }
+      let dest = r.url;
+      if (r.type === "ambiguous") {
+        let el = null;
+        try {
+          el = WS.query(arg).find((e) => e.href || e.closest("a[href]"));
+        } catch {
+          el = null; // not valid CSS — fall through to the URL interpretations
+        }
+        if (el) {
+          dest = el.href ? el.href : el.closest("a[href]").href;
+        } else {
+          dest = r.domainUrl || r.pathUrl;
+        }
+      }
+      term.print(`cd: ${dest}`);
+      location.assign(dest);
+      return [];
+    },
+  };
+
+  commands.pwd = {
+    desc: "print the current URL",
+    usage: "pwd",
+    fn(_args, _input, term) {
+      term.print(location.href);
+      return [location.href];
+    },
+  };
+
+  // ---------- network (HTTP via the service worker) ----------
+
+  commands.ping = {
+    desc: "HTTP reachability + latency (not ICMP; real ping arrives with the native host)",
+    usage: "ping <host|url> [count=3]",
+    async fn(args, _input, term) {
+      if (!args[0]) throw new Error("ping: usage: ping <host|url> [count]");
+      const url = /^https?:\/\//i.test(args[0]) ? args[0] : "https://" + args[0];
+      const count = Math.min(10, Math.max(1, Number(args[1]) || 3));
+      term.print(`PING ${url} — HTTP, ${count} request(s)`);
+      const times = [];
+      for (let i = 1; i <= count; i++) {
+        const res = await WS.swRequest({ type: "ping", url });
+        if (res && res.ok) {
+          times.push(res.ms);
+          term.print(`  #${i}  HTTP ${res.status}  ${res.ms} ms`);
+        } else {
+          term.print(`  #${i}  unreachable — ${(res && res.error) || "no response"}`);
+        }
+      }
+      if (times.length) {
+        const avg = Math.round(times.reduce((a, b) => a + b, 0) / times.length);
+        term.print(
+          `${times.length}/${count} ok — min ${Math.min(...times)} / avg ${avg} / max ${Math.max(...times)} ms`
+        );
+      }
+      return times.map(String);
+    },
+  };
+
+  commands.curl = {
+    desc: "fetch a URL and pipe its body line by line",
+    usage: "curl <url> [-i]   ·   curl api.github.com/zen | download zen.txt",
+    async fn(args, _input, term) {
+      const includeHeaders = args.includes("-i");
+      const target = args.find((a) => a !== "-i");
+      if (!target) throw new Error("curl: usage: curl <url> [-i]");
+      const url = /^https?:\/\//i.test(target) ? target : "https://" + target;
+      const res = await WS.swRequest({ type: "curl", url });
+      if (!res || !res.ok) {
+        throw new Error(`curl: ${(res && res.error) || "request failed"}`);
+      }
+      const out = [];
+      if (includeHeaders) {
+        out.push(`HTTP ${res.status} ${res.statusText || ""}`.trim());
+        for (const [k, v] of res.headers || []) out.push(`${k}: ${v}`);
+        out.push("");
+      }
+      for (const line of String(res.body || "").split(/\r?\n/)) out.push(line);
+      out.slice(0, 20).forEach((l) => term.print(l));
+      if (out.length > 20) term.print(`… and ${out.length - 20} more line(s)`);
+      term.print(
+        `HTTP ${res.status} — ${out.length} line(s)${res.truncated ? " (truncated at 512 KB)" : ""}`
+      );
+      return out;
+    },
+  };
+
+  // ---------- appearance & meta ----------
+
+  commands.theme = {
+    desc: "terminal theme: dark, light or auto (follow the system)",
+    usage: "theme [dark|light|auto]",
+    async fn(args, _input, term) {
+      if (!args[0]) {
+        const s = await WS.settings.load();
+        term.print(`theme: ${s.theme}`);
+        return [];
+      }
+      const t = args[0].toLowerCase();
+      if (!["dark", "light", "auto"].includes(t)) {
+        throw new Error("theme: use dark, light or auto");
+      }
+      await WS.settings.save({ theme: t });
+      if (WS.applyTheme) WS.applyTheme(t);
+      term.print(`theme set: ${t}`);
+      return [];
+    },
+  };
+
+  commands.history = {
+    desc: "command history for this site (persisted)",
+    usage: "history   ·   history clear   ·   history | grep extract",
+    fn(args, _input, term) {
+      if (args[0] === "clear") {
+        term.history = [];
+        term.historyIndex = 0;
+        WS.store.remove(WS.hostKey("history"));
+        term.print("history cleared for " + location.hostname);
+        return [];
+      }
+      const h = term.history;
+      h.forEach((line, i) => term.print(`  ${String(i + 1).padStart(3)}  ${line}`));
+      if (!h.length) term.print("history is empty");
+      return h.slice();
+    },
+  };
+
+  commands.feedback = {
+    desc: "found a bug or want a feature? opens the issue tracker",
+    usage: "feedback",
+    fn(_args, _input, term) {
+      const url = "https://github.com/juanma-dev/webshell-extension/issues/new";
+      window.open(url, "_blank", "noopener");
+      term.print("thank you! opening " + url);
+      return [];
+    },
+  };
+
   // ---------- monitor ----------
 
   const watchers = new Map();
   let watchId = 0;
 
+  function saveWatches() {
+    const list = Array.from(watchers.values()).map((w) => ({
+      selector: w.selector,
+      secs: w.secs,
+    }));
+    WS.store.set(WS.hostKey("watches"), list);
+  }
+
+  /** Starts a watch loop. Prints into whatever terminal exists when it fires,
+      so watches restored on page load work before the terminal is ever opened. */
+  function startWatch(selector, secs) {
+    const read = () =>
+      WS.query(selector).map((el) => el.textContent.trim()).join("\n");
+
+    let last = read();
+    const id = ++watchId;
+    const timer = setInterval(() => {
+      let now;
+      try {
+        now = read();
+      } catch {
+        return; // extension reloaded mid-flight; the new script takes over
+      }
+      if (now !== last) {
+        const msg = `"${selector}" changed:\n${WS.snippet(now, 120)}`;
+        const term = WS.terminal;
+        if (term && term.built) term.print(`⚡ watch [${id}]: ${msg}`);
+        try {
+          chrome.runtime.sendMessage({
+            type: "notify",
+            title: `WebShell — ${location.hostname}`,
+            message: msg,
+          });
+        } catch {}
+        last = now;
+      }
+    }, secs * 1000);
+
+    watchers.set(id, { selector, secs, timer });
+    return id;
+  }
+
+  /** Restores this site's persisted watches (runs on every page load). */
+  WS.restoreWatches = async function () {
+    const list = await WS.store.get(WS.hostKey("watches"), []);
+    if (!Array.isArray(list)) return 0;
+    for (const w of list) {
+      if (w && typeof w.selector === "string") {
+        startWatch(w.selector, Math.max(1, Number(w.secs) || 5));
+      }
+    }
+    return list.length;
+  };
+
   commands.watch = {
-    desc: "watch a selector and notify when its text changes",
-    usage: "watch <selector> [seconds=5]   ·   watch ls   ·   watch rm <id>",
+    desc: "watch a selector and notify when its text changes (persists across reloads)",
+    usage: "watch <selector> [seconds=5]   ·   watch ls   ·   watch rm <id|all>",
     fn(args, _input, term) {
       if (args[0] === "ls") {
         if (!watchers.size) term.print("no active watches");
@@ -309,11 +552,19 @@
         return [];
       }
       if (args[0] === "rm") {
+        if (args[1] === "all") {
+          for (const w of watchers.values()) clearInterval(w.timer);
+          watchers.clear();
+          saveWatches();
+          term.print("all watches stopped");
+          return [];
+        }
         const id = Number(args[1]);
         const w = watchers.get(id);
         if (!w) throw new Error(`watch rm: no watch [${args[1]}]`);
         clearInterval(w.timer);
         watchers.delete(id);
+        saveWatches();
         term.print(`watch [${id}] stopped`);
         return [];
       }
@@ -321,27 +572,12 @@
 
       const selector = args[0];
       const secs = Math.max(1, Number(args[1]) || 5);
-      const read = () =>
-        WS.query(selector).map((el) => el.textContent.trim()).join("\n");
-
-      let last = read();
-      const id = ++watchId;
-      const timer = setInterval(() => {
-        const now = read();
-        if (now !== last) {
-          const msg = `"${selector}" changed:\n${WS.snippet(now, 120)}`;
-          term.print(`⚡ watch [${id}]: ${msg}`);
-          chrome.runtime.sendMessage({
-            type: "notify",
-            title: `WebShell — ${location.hostname}`,
-            message: msg,
-          });
-          last = now;
-        }
-      }, secs * 1000);
-
-      watchers.set(id, { selector, secs, timer });
-      term.print(`watch [${id}] active: "${selector}" every ${secs}s (stop: watch rm ${id})`);
+      WS.query(selector); // validate the selector before persisting it
+      const id = startWatch(selector, secs);
+      saveWatches();
+      term.print(
+        `watch [${id}] active: "${selector}" every ${secs}s — persists on this site (stop: watch rm ${id})`
+      );
       return [];
     },
   };
