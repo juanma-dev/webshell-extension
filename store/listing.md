@@ -25,7 +25,7 @@ page becomes your filesystem: list, filter, extract and watch — with
 commands and pipes, no code required.
 
 ⚡ EXTRACT ANYTHING TO CSV
-Type `pick`, click what you want, press Enter. Tables, product lists,
+Type pick, click what you want, press Enter. Tables, product lists,
 links, images — downloaded as CSV or JSON in seconds.
   extract table | to-csv > data.csv
 
@@ -43,11 +43,16 @@ content changes — even while you work in another window.
   rm .cookie-banner, .modal, .ad
 Remove banners, overlays and clutter from your view with one command.
 
+🆕 NEW IN 0.2
+Navigate with cd and pwd, query APIs with curl, check latency with ping,
+Tab autocomplete, per-site command history, persistent watches, resizable
+terminal, light/dark themes and an options page. No new permissions.
+
 🔒 PRIVATE BY DESIGN
 Everything runs locally in your browser. No account, no servers, no
 data ever leaves your machine.
 
-Press Alt+W on any page and type `help` to see all 28 commands.
+Press Alt+W on any page and type help to see all 28 commands.
 ```
 
 **ES:**
@@ -58,7 +63,7 @@ Presiona Alt+W y la página se vuelve tu sistema de archivos: lista,
 filtra, extrae y vigila — con comandos y pipes, sin programar.
 
 ⚡ EXTRAE LO QUE SEA A CSV
-Escribe `pick`, haz clic en lo que quieras, presiona Enter. Tablas,
+Escribe pick, haz clic en lo que quieras, presiona Enter. Tablas,
 listas de productos, enlaces, imágenes — en CSV o JSON en segundos.
   extract table | to-csv > datos.csv
 
@@ -76,24 +81,22 @@ stock o cambie cualquier contenido — aunque estés en otra ventana.
   rm .cookie-banner, .modal, .ad
 Quita banners, overlays y estorbos de tu vista con un comando.
 
+🆕 NUEVO EN 0.2
+Navega con cd y pwd, consulta APIs con curl, mide latencia con ping,
+autocompletado con Tab, historial por sitio, watches persistentes,
+terminal redimensionable, temas claro/oscuro y página de opciones.
+Sin permisos nuevos.
+
 🔒 PRIVADO POR DISEÑO
 Todo corre localmente en tu navegador. Sin cuenta, sin servidores,
 tus datos nunca salen de tu máquina.
 
-Presiona Alt+W en cualquier página y escribe `help` para ver los 28 comandos.
+Presiona Alt+W en cualquier página y escribe help para ver los 28 comandos.
 ```
 
-## What's new in 0.2 (release notes for the store update)
-
-**EN:**
-> New: cd/pwd navigation, curl and HTTP ping, Tab autocomplete, per-site
-> command history, persistent watches, resizable terminal, light/dark themes
-> and an options page. No new permissions.
-
-**ES:**
-> Nuevo: navegación cd/pwd, curl y ping HTTP, autocompletado con Tab,
-> historial por sitio, watches persistentes, terminal redimensionable,
-> temas claro/oscuro y página de opciones. Sin permisos nuevos.
+> The store has no changelog field: the "NEW IN 0.2" section above is part of
+> the detailed description itself. Paste each block as-is — the description
+> field is plain text (no markdown, no backticks).
 
 ## Assets checklist
 
