@@ -100,4 +100,37 @@ window.WebShell = window.WebShell || {};
     if (Array.isArray(item)) return item.join(" | ");
     return String(item);
   };
+
+  // ---- Tab-completion candidates ----------------------------------------
+
+  let candCache = null;
+  let candTime = 0;
+
+  /** Selector candidates from the page: tag names, #ids and stable .classes.
+      Cached briefly so holding Tab doesn't rescan large pages. */
+  WS.selectorCandidates = function () {
+    const now = Date.now();
+    if (candCache && now - candTime < 2000) return candCache;
+
+    const out = new Set();
+    const els = document.querySelectorAll("*");
+    const cap = Math.min(els.length, 4000);
+    for (let i = 0; i < cap; i++) {
+      const el = els[i];
+      if (el.closest && el.closest("#webshell-root")) continue;
+      out.add(el.tagName.toLowerCase());
+      if (el.id && /^[A-Za-z][\w-]*$/.test(el.id)) out.add("#" + el.id);
+      for (const c of el.classList) {
+        if (
+          /^[A-Za-z][A-Za-z0-9_-]{1,29}$/.test(c) &&
+          !(WS.looksGenerated && WS.looksGenerated(c))
+        ) {
+          out.add("." + c);
+        }
+      }
+    }
+    candCache = Array.from(out);
+    candTime = now;
+    return candCache;
+  };
 })(window.WebShell);

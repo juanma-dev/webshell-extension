@@ -11,6 +11,8 @@
       .split(/[-_]+/)
       .some((tok) => tok.length >= 5 && /\d/.test(tok) && /[a-z]/i.test(tok));
   }
+  // Tab completion (dom-utils) reuses this to skip machine-generated classes.
+  WS.looksGenerated = looksGenerated;
 
   /** Selector part for an element: stable test attribute, or tag + up to 2 stable classes. */
   function cssPart(el) {
