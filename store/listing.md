@@ -47,7 +47,7 @@ Remove banners, overlays and clutter from your view with one command.
 Everything runs locally in your browser. No account, no servers, no
 data ever leaves your machine.
 
-Press Alt+W on any page and type `help` to see all 20 commands.
+Press Alt+W on any page and type `help` to see all 28 commands.
 ```
 
 **ES:**
@@ -80,8 +80,20 @@ Quita banners, overlays y estorbos de tu vista con un comando.
 Todo corre localmente en tu navegador. Sin cuenta, sin servidores,
 tus datos nunca salen de tu máquina.
 
-Presiona Alt+W en cualquier página y escribe `help` para ver los 20 comandos.
+Presiona Alt+W en cualquier página y escribe `help` para ver los 28 comandos.
 ```
+
+## What's new in 0.2 (release notes for the store update)
+
+**EN:**
+> New: cd/pwd navigation, curl and HTTP ping, Tab autocomplete, per-site
+> command history, persistent watches, resizable terminal, light/dark themes
+> and an options page. No new permissions.
+
+**ES:**
+> Nuevo: navegación cd/pwd, curl y ping HTTP, autocompletado con Tab,
+> historial por sitio, watches persistentes, terminal redimensionable,
+> temas claro/oscuro y página de opciones. Sin permisos nuevos.
 
 ## Assets checklist
 

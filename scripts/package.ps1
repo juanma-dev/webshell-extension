@@ -8,6 +8,6 @@ $out = "webshell-v$($manifest.version).zip"
 if (Test-Path $out) { Remove-Item $out }
 
 # Only what the extension needs at runtime — no docs, tests, git or scripts.
-Compress-Archive -Path manifest.json, _locales, content, background, icons -DestinationPath $out
+Compress-Archive -Path manifest.json, _locales, content, background, options, icons -DestinationPath $out
 
 Write-Host "Created $out ($([math]::Round((Get-Item $out).Length / 1KB)) KB)"
