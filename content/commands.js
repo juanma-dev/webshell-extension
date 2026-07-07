@@ -473,12 +473,26 @@
   };
 
   commands.feedback = {
-    desc: "found a bug or want a feature? opens the issue tracker",
-    usage: "feedback",
-    fn(_args, _input, term) {
-      const url = "https://github.com/juanma-dev/webshell-extension/issues/new";
+    desc: "found a bug or want a feature? opens a prefilled GitHub issue",
+    usage: 'feedback "add ssh support"   ·   feedback (blank form)',
+    fn(args, _input, term) {
+      const base = "https://github.com/juanma-dev/webshell-extension/issues/new";
+      let url = base;
+      if (args.length) {
+        const title = args.join(" ");
+        let version = "0.2";
+        try {
+          version = chrome.runtime.getManifest().version;
+        } catch {}
+        // The user sees and can edit all of this on GitHub before submitting.
+        const body =
+          `**What:** ${title}\n\n**Details:**\n\n---\n` +
+          `_WebShell v${version} — reported from the terminal on ${location.hostname}_`;
+        url = `${base}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+      }
       window.open(url, "_blank", "noopener");
-      term.print("thank you! opening " + url);
+      term.print("thank you! review the issue on GitHub and press 'Submit new issue'.");
+      term.print("(posting needs a free GitHub account)");
       return [];
     },
   };

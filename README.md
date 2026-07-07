@@ -44,7 +44,7 @@ The shortcut can be changed at `chrome://extensions/shortcuts`.
 | `ping <host> [n]` | HTTP reachability + latency (not ICMP) | `ping example.com` |
 | `history` | this site's command history (persisted) | `history \| grep extract` |
 | `theme <mode>` | terminal theme: dark, light or auto | `theme light` |
-| `feedback` | report a bug / request a feature | `feedback` |
+| `feedback` | open a GitHub issue, prefilled with your text | `feedback "add ssh support"` |
 | `clear` | clear the terminal | |
 
 ### Pipes and redirection
