@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WebShell — a Unix-style terminal inside any webpage</title>
+<meta name="description" content="Press Alt+W and the page becomes your filesystem: list, filter, extract to CSV and watch for changes — with commands and pipes, no code required. Free Chrome extension.">
+<meta property="og:title" content="WebShell — a Unix-style terminal inside any webpage">
+<meta property="og:description" content="Extract data to CSV, watch for changes, clean up pages — with commands and pipes. Free, private, source-available.">
+<meta property="og:image" content="https://juanma-dev.github.io/webshell-extension/icon128.png">
+<link rel="icon" href="icon128.png">
+<style>
+  :root {
+    --bg: #0e1015;
+    --panel: #151823;
+    --border: #232838;
+    --fg: #e6e6e6;
+    --muted: #98a0ae;
+    --green: #50fa7b;
+    --cyan: #8be9fd;
+    --red: #ff5555;
+    --mono: Consolas, "Cascadia Code", Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+  a { color: var(--cyan); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+  .brand img { width: 28px; height: 28px; }
+  nav a { color: var(--muted); text-decoration: none; margin-left: 18px; font-size: 14px; }
+  nav a:hover { color: var(--fg); }
+
+  .hero { text-align: center; padding: 56px 0 28px; }
+  .hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.2; letter-spacing: -0.5px; }
+  .hero h1 em { color: var(--green); font-style: normal; }
+  .hero p.sub { color: var(--muted); max-width: 620px; margin: 16px auto 0; font-size: 17px; }
+  .cta { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 12px 22px; border-radius: 8px;
+    text-decoration: none; font-weight: 600; font-size: 15px;
+  }
+  .btn-primary { background: var(--green); color: #0b2314; }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--fg); }
+  .btn-ghost:hover { border-color: var(--muted); }
+  .trust { margin-top: 14px; color: var(--muted); font-size: 13px; }
+
+  .term {
+    margin: 40px auto 0; max-width: 720px; text-align: left;
+    background: #10131b; border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5); overflow: hidden;
+  }
+  .term-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: #171b26; padding: 8px 12px; border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: 12px; color: var(--cyan);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #333a4d; }
+  .dot:first-child { background: var(--red); }
+  .term-body {
+    font-family: var(--mono); font-size: 14px; padding: 14px 16px;
+    min-height: 132px; white-space: pre-wrap; word-break: break-word;
+  }
+  .t-cmd { color: var(--green); }
+  .t-out { color: var(--fg); }
+  .caret {
+    display: inline-block; width: 8px; height: 15px; background: var(--green);
+    vertical-align: -2px; animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  section { padding: 56px 0 8px; }
+  h2 { font-size: 24px; margin-bottom: 24px; text-align: center; }
+  .grid {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px;
+  }
+  .card h3 { font-size: 16px; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: 14px; }
+  .card code {
+    font-family: var(--mono); font-size: 13px; color: var(--green);
+  }
+
+  .steps { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .step { text-align: center; padding: 18px; }
+  .step .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--panel); border: 1px solid var(--border);
+    color: var(--green); font-weight: 700; margin-bottom: 10px;
+  }
+  .step p { color: var(--muted); font-size: 14px; }
+  .step kbd {
+    font-family: var(--mono); background: var(--panel);
+    border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px;
+  }
+
+  .pro {
+    margin-top: 48px; text-align: center; color: var(--muted); font-size: 14px;
+    border: 1px dashed var(--border); border-radius: 10px; padding: 16px 20px;
+  }
+
+  footer {
+    margin-top: 64px; padding: 26px 0 40px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 13px; text-align: center;
+  }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--fg); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><img src="icon128.png" alt=""> WebShell</div>
+    <nav>
+      <a href="https://github.com/juanma-dev/webshell-extension">GitHub</a>
+      <a href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Install</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>A Unix-style terminal<br>inside <em>any webpage</em></h1>
+    <p class="sub">Press Alt+W and the page becomes your filesystem: list, filter,
+    extract to CSV and watch for changes — with commands and pipes, no code required.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Add to Chrome — it's free</a>
+      <a class="btn btn-ghost" href="https://github.com/juanma-dev/webshell-extension">View source on GitHub</a>
+    </div>
+    <div class="trust">Free · No account · Nothing ever leaves your machine</div>
+
+    <div class="term">
+      <div class="term-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        &nbsp;webshell — en.wikipedia.org</div>
+      <div class="term-body" id="demo"></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>What you can do</h2>
+    <div class="grid">
+      <div class="card"><h3>⚡ Extract anything to CSV</h3>
+        <p>Tables, product lists, links, images. <code>extract table | to-csv &gt; data.csv</code> and it's on your disk.</p></div>
+      <div class="card"><h3>🎯 Point &amp; click selectors</h3>
+        <p>Type <code>pick</code>, click the thing you want — WebShell writes a stable CSS selector for you and skips machine-generated class names.</p></div>
+      <div class="card"><h3>🔔 Watch for changes</h3>
+        <p><code>watch .price 30</code> sends a desktop notification when a price drops or stock returns. Watches survive page reloads.</p></div>
+      <div class="card"><h3>🧭 Navigate like a filesystem</h3>
+        <p><code>cd ..</code>, <code>cd -</code>, <code>pwd</code> — treat the site as a directory tree, and the terminal reopens after every jump.</p></div>
+      <div class="card"><h3>🌐 curl &amp; ping, in the page</h3>
+        <p>Query any API and pipe the result: <code>curl api.github.com/zen | download zen.txt</code>. Check latency without leaving the tab.</p></div>
+      <div class="card"><h3>🔒 Private by design</h3>
+        <p>Plain JavaScript, runs 100% locally, zero analytics. The source is public — audit every line.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Up and running in 20 seconds</h2>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><p>Add WebShell to Chrome</p></div>
+      <div class="step"><span class="n">2</span><p>Press <kbd>Alt</kbd>+<kbd>W</kbd> on any page</p></div>
+      <div class="step"><span class="n">3</span><p>Type <kbd>help</kbd> — 28 commands, pipes included</p></div>
+    </div>
+    <div class="pro">On the roadmap: <strong>ssh</strong>, <strong>telnet</strong> and real ICMP <strong>ping</strong> through a
+    native Rust host — browsers can't open raw sockets, so that's where WebShell&nbsp;Pro will begin.</div>
+  </section>
+
+  <footer>
+    © 2026 Juan Manuel Castellanos Hernandez ·
+    <a href="https://github.com/juanma-dev/webshell-extension">Source</a> ·
+    <a href="https://github.com/juanma-dev/webshell-extension/blob/main/LICENSE.md">PolyForm Shield 1.0.0</a> ·
+    <a href="https://github.com/juanma-dev/webshell-extension/blob/main/PRIVACY.md">Privacy</a> ·
+    <a href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Chrome Web Store</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var demos = [
+    ["extract table | to-csv > gdp.csv", ["193 row(s) extracted", "saved: gdp.csv"]],
+    ["watch .price 30", ["watch [1] active: \".price\" every 30s — persists on this site", "⚡ watch [1]: \".price\" changed: $39.99"]],
+    ["curl api.github.com/zen | download zen.txt", ["Keep it logically awesome.", "HTTP 200 — 1 line(s)", "downloaded: zen.txt"]],
+    ["rm .cookie-banner, .modal", ["removed 3 element(s)"]],
+    ["ls h2 | grep deals | count", ["7"]]
+  ];
+  var el = document.getElementById("demo");
+
+  function render(cmdPart, outLines, caret) {
+    var html = '<span class="t-cmd">$ ' + cmdPart + "</span>";
+    if (caret) html += '<span class="caret"></span>';
+    for (var i = 0; i < outLines.length; i++) {
+      html += '\n<span class="t-out">' + outLines[i] + "</span>";
+    }
+    el.innerHTML = html;
+  }
+
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    render(demos[0][0], demos[0][1], false);
+    return;
+  }
+
+  var d = 0;
+  function play() {
+    var cmd = demos[d][0], out = demos[d][1], i = 0;
+    function type() {
+      render(cmd.slice(0, i), [], true);
+      if (i++ <= cmd.length) { setTimeout(type, 38); return; }
+      var shown = [];
+      function reveal() {
+        if (shown.length < out.length) {
+          shown.push(out[shown.length]);
+          render(cmd, shown, true);
+          setTimeout(reveal, 300);
+        } else {
+          d = (d + 1) % demos.length;
+          setTimeout(play, 2400);
+        }
+      }
+      setTimeout(reveal, 350);
+    }
+    type();
+  }
+  play();
+})();
+</script>
+</body>
+</html>
