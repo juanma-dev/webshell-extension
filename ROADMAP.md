@@ -54,22 +54,39 @@ Everything below ships without asking for new permissions.
 - [x] `feedback`: opens the issue tracker from the terminal (repo must be public!)
 - [ ] Manual QA pass on real sites, then publish the 0.2 update to the Web Store
 
-## Phase 3 — Monetization: Native Messaging with Rust (month 2)
+## Phase 3 — Pro: `ssh` in the browser (path B1)
 
-**This is where Rust comes in.** A native host the extension installs to touch the real system.
+**This is where Rust comes in** — not as a local `.exe`, but as a WebSocket
+relay plus an in-browser SSH client compiled to WebAssembly. Most users are on
+Chromebooks, where a native host can't run at all; B1 works everywhere and keeps
+SSH end-to-end encrypted (the relay only ever sees ciphertext). Pro code lives in
+the private `webshell-pro` repo. (See its `ARCHITECTURE.md` for why B1 over a
+native host and over russh.)
 
-- [ ] Native Messaging host in Rust (single binary, stdin/stdout protocol)
-- [ ] Host installer (script + Windows registry / manifest on disk)
-- [ ] `sh <script>` command: run system commands from the web terminal
-- [ ] Network tools via the native host (**Pro flagship**): `ssh`, `telnet`, real ICMP `ping`
-      — raw TCP/ICMP sockets don't exist in the extension sandbox; the Rust host unlocks them
-- [ ] Pipe to the system: `extract table | sh process.sh`
-- [ ] Save files directly to disk (not just Downloads)
-- [ ] Split repos: this one stays public (PolyForm Shield 1.0.0); a private
-      `webshell-pro` repo hosts the Rust native host, license checks and payments
-- [ ] Pro licensing system (ExtensionPay or LemonSqueezy)
-- [ ] Pro feature gate: native messaging, unlimited watches
-- [ ] Pricing: Free / Pro $8 USD/mo / Lifetime $129 USD
+Done:
+
+- [x] Split repos: this one public (PolyForm Shield 1.0.0); private `webshell-pro`
+- [x] Rust WebSocket↔TCP relay (shared-token auth + target allowlist)
+- [x] SSH client in Rust→WASM (makiko): key exchange, **standard `known_hosts`**
+      host-key verification, password auth, PTY
+- [x] Interactive terminal (xterm.js): ANSI/colors + bundled Nerd Font (P10k glyphs)
+- [x] `ssh [user@]host[:port]` — the flagship Pro feature, end-to-end encrypted
+
+To ship the business:
+
+- [ ] Options page: relay URL/token, license key, `known_hosts` management
+- [ ] Public-key auth (in addition to password)
+- [ ] License gate: the relay verifies a signed (ed25519) license before connecting
+- [ ] Storefront (LemonSqueezy) + pricing: Free / Pro $8 USD/mo / Lifetime $129 USD
+- [ ] Host a production relay over `wss://` (or document self-hosting)
+- [ ] `telnet` over the relay (minor)
+
+### Deferred — optional desktop add-on (native host)
+
+Only useful on desktop (not Chromebooks), so it waits until a Windows audience grows:
+
+- [ ] Native Messaging host in Rust: `sh <script>`, save-to-disk, real ICMP `ping`
+- [ ] Host installer (Windows registry / manifest on disk) + `sh` piping
 
 ## Phase 4 — Differentiators (month 3+)
 
