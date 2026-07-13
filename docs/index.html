@@ -236,5 +236,22 @@
   play();
 })();
 </script>
+
+<script>
+(function () {
+  // Paddle checkout: this page is the account's "default payment link". A
+  // buyer arrives with ?_ptxn=<transaction id> and Paddle.js opens the payment
+  // overlay on top of the page automatically. Normal visitors never load it.
+  if (window.location.search.indexOf("_ptxn=") === -1) return;
+  var TOKEN = "test_2902242caaa35a526705c26b27d"; // client-side token (public by design)
+  var s = document.createElement("script");
+  s.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
+  s.onload = function () {
+    if (TOKEN.indexOf("test_") === 0) Paddle.Environment.set("sandbox");
+    Paddle.Initialize({ token: TOKEN });
+  };
+  document.head.appendChild(s);
+})();
+</script>
 </body>
 </html>
