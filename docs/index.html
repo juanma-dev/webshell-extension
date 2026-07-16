@@ -304,7 +304,7 @@
   // buyer arrives with ?_ptxn=<transaction id> and Paddle.js opens the payment
   // overlay on top of the page automatically. Normal visitors never load it.
   if (window.location.search.indexOf("_ptxn=") === -1) return;
-  var TOKEN = "test_2902242caaa35a526705c26b27d"; // client-side token (public by design)
+  var TOKEN = "live_cebb746c063c701c2bd3881dbac"; // client-side token (public by design)
   var s = document.createElement("script");
   s.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
   s.onload = function () {
