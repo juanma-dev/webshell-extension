@@ -1,10 +1,13 @@
 # WebShell — Privacy Policy
 
-*Last updated: June 12, 2026*
+*Last updated: July 14, 2026*
 
 ## The short version
 
-WebShell does not collect, store, transmit or sell any user data. Period.
+The free WebShell extension does not collect, store, transmit or sell any user
+data. Period. The optional paid upgrade (WebShell Pro) uses the minimum needed
+to sell and operate it — see "WebShell Pro" below and the full policy at
+https://web-shell.app/privacy.html.
 
 ## Details
 
@@ -25,6 +28,23 @@ WebShell does not collect, store, transmit or sell any user data. Period.
   - *Storage* — used solely to keep your preferences in your browser's local
     extension storage.
 
+## WebShell Pro (optional paid features)
+
+Only if you buy WebShell Pro:
+
+- **Payments** are processed by Paddle (merchant of record) under Paddle's
+  privacy policy; we never see card details. We receive your **email address**
+  and subscription status.
+- **Your license** is a signed token (email + plan) stored in your browser —
+  including the browser's own sync storage — and sent to our servers to
+  validate Pro access and renew itself.
+- **The `ssh` relay** carries sessions **end-to-end encrypted** (the SSH
+  encryption happens in your browser): the relay cannot read passwords, keys
+  or session content. Operational logs keep connection metadata only
+  (destination host:port, license email, timestamps), briefly, for
+  reliability and abuse prevention.
+- No analytics, no ads, no selling of data — same as the free extension.
+
 ## Changes
 
 If this policy ever changes, the update will be published in this repository
@@ -34,3 +54,4 @@ and reflected in the "Last updated" date above.
 
 Questions: open an issue at
 https://github.com/juanma-dev/webshell-extension/issues
+or email support@web-shell.app

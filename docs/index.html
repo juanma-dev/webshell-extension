@@ -7,7 +7,8 @@
 <meta name="description" content="Press Alt+W and the page becomes your filesystem: list, filter, extract to CSV and watch for changes — with commands and pipes, no code required. Free Chrome extension.">
 <meta property="og:title" content="WebShell — a Unix-style terminal inside any webpage">
 <meta property="og:description" content="Extract data to CSV, watch for changes, clean up pages — with commands and pipes. Free, private, source-available.">
-<meta property="og:image" content="https://juanma-dev.github.io/webshell-extension/icon128.png">
+<meta property="og:image" content="https://web-shell.app/icon128.png">
+<link rel="canonical" href="https://web-shell.app/">
 <link rel="icon" href="icon128.png">
 <style>
   :root {
@@ -109,10 +110,20 @@
     border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px;
   }
 
-  .pro {
-    margin-top: 48px; text-align: center; color: var(--muted); font-size: 14px;
-    border: 1px dashed var(--border); border-radius: 10px; padding: 16px 20px;
+  .plans { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: stretch; }
+  .plan {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px; display: flex; flex-direction: column;
   }
+  .plan.hot { border-color: var(--green); }
+  .plan h3 { font-size: 16px; margin-bottom: 2px; }
+  .plan .price { font-size: 30px; font-weight: 700; margin: 8px 0 2px; }
+  .plan .per { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+  .plan ul { list-style: none; margin: 0 0 18px; flex: 1; }
+  .plan li { color: var(--muted); font-size: 14px; padding: 3px 0; }
+  .plan li::before { content: "✓ "; color: var(--green); }
+  .plan .btn { text-align: center; }
+  .fineprint { margin-top: 18px; text-align: center; color: var(--muted); font-size: 12.5px; }
 
   footer {
     margin-top: 64px; padding: 26px 0 40px; border-top: 1px solid var(--border);
@@ -127,6 +138,7 @@
   <header>
     <div class="brand"><img src="icon128.png" alt=""> WebShell</div>
     <nav>
+      <a href="#pricing">Pricing</a>
       <a href="https://github.com/juanma-dev/webshell-extension">GitHub</a>
       <a href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Install</a>
     </nav>
@@ -174,15 +186,64 @@
       <div class="step"><span class="n">2</span><p>Press <kbd>Alt</kbd>+<kbd>W</kbd> on any page</p></div>
       <div class="step"><span class="n">3</span><p>Type <kbd>help</kbd> — 28 commands, pipes included</p></div>
     </div>
-    <div class="pro">On the roadmap: <strong>ssh</strong>, <strong>telnet</strong> and real ICMP <strong>ping</strong> through a
-    native Rust host — browsers can't open raw sockets, so that's where WebShell&nbsp;Pro will begin.</div>
+  </section>
+
+  <section id="pricing">
+    <h2>Pricing</h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>Free</h3>
+        <div class="price">$0</div>
+        <div class="per">forever</div>
+        <ul>
+          <li>All 28 commands, pipes included</li>
+          <li>Extract to CSV, watch, pick, curl</li>
+          <li>Runs 100% locally, no account</li>
+          <li>Source available on GitHub</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Add to Chrome</a>
+      </div>
+      <div class="plan hot">
+        <h3>Pro</h3>
+        <div class="price">$8</div>
+        <div class="per">per month · cancel anytime</div>
+        <ul>
+          <li><strong>Real <code>ssh</code></strong> from inside the browser</li>
+          <li>Works on Chromebooks — no install</li>
+          <li>End-to-end encrypted: our relay only ever sees ciphertext</li>
+          <li>Full terminal: colors, vim, Powerlevel10k fonts</li>
+          <li>License activates &amp; renews automatically</li>
+          <li>Coming next: telnet, macros, cron</li>
+        </ul>
+        <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Get WebShell, upgrade in Options</a>
+      </div>
+      <div class="plan">
+        <h3>Lifetime</h3>
+        <div class="price">$129</div>
+        <div class="per">one-time payment</div>
+        <ul>
+          <li>Everything in Pro</li>
+          <li>Pay once, keep it for the product's lifetime</li>
+          <li>All future Pro features included</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Get WebShell, upgrade in Options</a>
+      </div>
+    </div>
+    <p class="fineprint">
+      Upgrade from inside the extension: right-click the WebShell icon → <strong>Options</strong> → <strong>Get WebShell Pro</strong>.
+      Payments are processed securely by <a href="https://www.paddle.com">Paddle</a>, our merchant of record. Prices in USD; taxes handled at checkout.
+      <a href="refunds.html">14-day refund policy</a> · <a href="terms.html">Terms</a>
+    </p>
   </section>
 
   <footer>
     © 2026 Juan Manuel Castellanos Hernandez ·
     <a href="https://github.com/juanma-dev/webshell-extension">Source</a> ·
     <a href="https://github.com/juanma-dev/webshell-extension/blob/main/LICENSE.md">PolyForm Shield 1.0.0</a> ·
-    <a href="https://github.com/juanma-dev/webshell-extension/blob/main/PRIVACY.md">Privacy</a> ·
+    <a href="privacy.html">Privacy</a> ·
+    <a href="terms.html">Terms</a> ·
+    <a href="refunds.html">Refunds</a> ·
+    <a href="mailto:support@web-shell.app">support@web-shell.app</a> ·
     <a href="https://chromewebstore.google.com/detail/ajgieopkcookmkfbanehjimlbojbijei">Chrome Web Store</a>
   </footer>
 </div>

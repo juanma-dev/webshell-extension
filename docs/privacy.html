@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — WebShell</title>
+<link rel="icon" href="icon128.png">
+<style>
+  :root { --bg:#0e1015; --panel:#151823; --border:#232838; --fg:#e6e6e6; --muted:#98a0ae; --green:#50fa7b; --cyan:#8be9fd; --mono:Consolas,"Cascadia Code",Menlo,monospace; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.7}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px 60px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:18px 0;margin-bottom:28px;border-bottom:1px solid var(--border)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:var(--fg);text-decoration:none}
+  .brand img{width:28px;height:28px}
+  nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-size:14px}
+  nav a:hover{color:var(--fg)}
+  h1{font-size:28px;margin:12px 0 4px}
+  .updated{color:var(--muted);font-size:13px;margin-bottom:26px}
+  h2{font-size:19px;margin:28px 0 8px}
+  p,li{color:var(--muted);font-size:15px}
+  ul{padding-left:22px;margin:8px 0}
+  a{color:var(--cyan)}
+  strong{color:var(--fg)}
+  code{font-family:var(--mono);font-size:13px;color:var(--green)}
+  footer{margin-top:48px;padding-top:22px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="index.html"><img src="icon128.png" alt=""> WebShell</a>
+    <nav>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="terms.html">Terms</a>
+      <a href="refunds.html">Refunds</a>
+    </nav>
+  </header>
+
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: July 14, 2026</p>
+
+  <h2>The short version</h2>
+  <p>The free extension collects nothing — everything runs on your machine.
+  WebShell Pro needs the minimum required to sell and operate it: your email
+  (from the purchase) and encrypted relay connections. No analytics, no ads,
+  no selling of data — anywhere.</p>
+
+  <h2>The free extension</h2>
+  <ul>
+    <li><strong>Everything runs locally.</strong> Commands execute inside your browser;
+    the free extension makes no network requests of its own and has no servers.</li>
+    <li><strong>No tracking.</strong> No analytics, telemetry, advertising or third-party
+    code of any kind.</li>
+    <li><strong>No account.</strong> No sign-up, login or personal information.</li>
+    <li><strong>Extracted data stays yours.</strong> CSV/JSON files are saved straight to
+    your computer through the browser's download mechanism.</li>
+  </ul>
+
+  <h2>WebShell Pro</h2>
+  <ul>
+    <li><strong>Payments</strong> are handled by <a href="https://www.paddle.com">Paddle</a>,
+    our merchant of record, under
+    <a href="https://www.paddle.com/legal/privacy">Paddle's privacy policy</a>. We never
+    see your card details. From a purchase we receive your <strong>email address</strong>
+    and subscription status.</li>
+    <li><strong>Your license</strong> is a signed token containing your email and plan. It
+    is stored in your browser (including your browser's own sync, so it follows
+    your profile) and is presented to our servers to validate Pro access and
+    renew itself.</li>
+    <li><strong>The ssh relay</strong> carries your session as an <strong>end-to-end encrypted</strong>
+    stream — SSH encryption happens in your browser, so the relay cannot read
+    your passwords, keys or session content. We see connection metadata only
+    (destination host and port, license email, timestamps), kept briefly in
+    operational logs for reliability and abuse prevention.</li>
+    <li><strong>The license server</strong> talks to Paddle to check your purchase and
+    issues license tokens; it stores no customer database.</li>
+  </ul>
+
+  <h2>Your rights</h2>
+  <p>Write to <a href="mailto:support@web-shell.app">support@web-shell.app</a> to access
+  or delete what we hold about you (your purchase records live with Paddle;
+  our own servers keep only short-lived operational logs).</p>
+
+  <h2>Changes</h2>
+  <p>Updates will be published on this page and reflected in the date above.</p>
+
+  <footer>
+    © 2026 Juan Manuel Castellanos Hernandez ·
+    <a href="index.html">web-shell.app</a> ·
+    <a href="mailto:support@web-shell.app">support@web-shell.app</a>
+  </footer>
+</div>
+</body>
+</html>
