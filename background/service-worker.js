@@ -107,6 +107,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     httpGet(msg.url).then(sendResponse);
     return true;
   }
+
+  // Open the extension's options page (content scripts can't call this API
+  // directly). Used by the "Options" affordances in the terminal.
+  if (msg.type === "open-options") {
+    chrome.runtime.openOptionsPage();
+    return;
+  }
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {
