@@ -114,6 +114,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     chrome.runtime.openOptionsPage();
     return;
   }
+
+  // Open an extension page in a new tab (e.g. the Pro plans page). The path is
+  // resolved through getURL, so only the extension's own pages can be opened.
+  if (msg.type === "open-page" && typeof msg.path === "string") {
+    chrome.tabs.create({ url: chrome.runtime.getURL(msg.path) });
+    return;
+  }
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {
