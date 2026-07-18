@@ -43,14 +43,25 @@ content changes — even while you work in another window.
   rm .cookie-banner, .modal, .ad
 Remove banners, overlays and clutter from your view with one command.
 
-🆕 NEW IN 0.2
-Navigate with cd and pwd, query APIs with curl, check latency with ping,
-Tab autocomplete, per-site command history, persistent watches, resizable
-terminal, light/dark themes and an options page. No new permissions.
+🆕 NEW IN 0.3 — WEBSHELL PRO (OPTIONAL)
+Real SSH from inside your browser. Type ssh user@yourserver.com and get a
+full terminal — colors, vim, even your server's Powerlevel10k prompt —
+running on any device, Chromebooks included. Your session is end-to-end
+encrypted: our relay only ever sees ciphertext, never your passwords or
+data. Works with servers on the public internet (public IP or domain).
+
+WebShell Pro is a paid upgrade: $8/month or $129 once (lifetime). The
+license activates automatically after checkout — nothing to paste — and
+renewals are silent. Cancel anytime, self-serve. 14-day refund policy at
+web-shell.app/refunds.html. Payments by Paddle (merchant of record).
+
+Everything else in WebShell stays free, forever.
 
 🔒 PRIVATE BY DESIGN
-Everything runs locally in your browser. No account, no servers, no
-data ever leaves your machine.
+The free extension runs 100% locally: no account, no servers, no data
+ever leaves your machine. If you buy Pro, we only use your email (for
+the license) and relay your encrypted ssh traffic — we can't read it.
+Full policy: web-shell.app/privacy.html
 
 Press Alt+W on any page and type help to see all 28 commands.
 ```
@@ -81,15 +92,27 @@ stock o cambie cualquier contenido — aunque estés en otra ventana.
   rm .cookie-banner, .modal, .ad
 Quita banners, overlays y estorbos de tu vista con un comando.
 
-🆕 NUEVO EN 0.2
-Navega con cd y pwd, consulta APIs con curl, mide latencia con ping,
-autocompletado con Tab, historial por sitio, watches persistentes,
-terminal redimensionable, temas claro/oscuro y página de opciones.
-Sin permisos nuevos.
+🆕 NUEVO EN 0.3 — WEBSHELL PRO (OPCIONAL)
+SSH real dentro de tu navegador. Escribe ssh usuario@tuservidor.com y
+tienes una terminal completa — colores, vim, hasta el prompt Powerlevel10k
+de tu servidor — en cualquier equipo, Chromebooks incluidos. Tu sesión va
+cifrada de extremo a extremo: nuestro relay solo ve texto cifrado, nunca
+tus contraseñas ni tus datos. Funciona con servidores en internet pública
+(IP o dominio público).
+
+WebShell Pro es una mejora de pago: $8/mes o $129 una vez (de por vida).
+La licencia se activa sola tras el pago — nada que pegar — y las
+renovaciones son silenciosas. Cancela cuando quieras, sin trámites.
+Garantía de 14 días: web-shell.app/refunds.html. Pagos por Paddle
+(merchant of record).
+
+Todo lo demás de WebShell sigue gratis, para siempre.
 
 🔒 PRIVADO POR DISEÑO
-Todo corre localmente en tu navegador. Sin cuenta, sin servidores,
-tus datos nunca salen de tu máquina.
+La extensión gratuita corre 100% local: sin cuenta, sin servidores, tus
+datos nunca salen de tu máquina. Si compras Pro, solo usamos tu email
+(para la licencia) y transportamos tu tráfico ssh cifrado — no podemos
+leerlo. Política completa: web-shell.app/privacy.html
 
 Presiona Alt+W en cualquier página y escribe help para ver los 28 comandos.
 ```
@@ -115,5 +138,23 @@ Presiona Alt+W en cualquier página y escribe help para ver los 28 comandos.
 - Build the zip: `powershell -File scripts/package.ps1`
 - Justify permissions in the listing (review asks): `scripting` + `<all_urls>`
   → "injects the terminal UI into the page the user invokes it on";
-  `notifications` → "watch command alerts"; `storage` → "user preferences".
-- Privacy: declare that no user data is collected or transmitted.
+  `notifications` → "watch command alerts"; `storage` → "user preferences
+  and the Pro license".
+
+### Privacy tab (dashboard) — updated for 0.3 / Pro
+
+The old "collects nothing" answer is no longer accurate. Declare:
+
+- **Data collected**: *Personally identifiable information → Email address.*
+  Purpose: **app functionality** (license issuance/renewal for the optional
+  paid tier). Not sold, not shared beyond the payment processor (Paddle,
+  merchant of record), not used for unrelated purposes — tick the three
+  certification boxes accordingly.
+- **Authentication information**: NOT collected (ssh credentials never reach
+  us — end-to-end encrypted in the browser; the relay sees ciphertext only).
+- **Web history / user activity / location etc.**: not collected.
+- Privacy policy URL for the listing: `https://web-shell.app/privacy.html`
+- Remote code: none — all code (including the WASM ssh client) ships inside
+  the package. Paddle.js loads on our website, not in the extension.
+- Single purpose: "a command-line terminal for interacting with webpages and
+  servers" — Pro ssh is part of that purpose.
