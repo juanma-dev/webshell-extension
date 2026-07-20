@@ -95,6 +95,7 @@ Only useful on desktop (not Chromebooks), so it waits until a Windows audience g
 - [ ] Rust WASM module: high-volume parsing/regex for huge pages
 - [ ] AI layer: natural language → command (`"get all the emails"`)
 - [x] Webhooks: `watch .price --webhook https://...` — POSTs each change as JSON (shipped in Pro)
+- [x] Query pipes: `extract table | where "price < 100" | sort -price` — SQL-style filtering over extracted rows (shipped in Pro)
 
 ## Phase 5 — Scale (month 6+)
 
