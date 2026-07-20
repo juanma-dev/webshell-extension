@@ -97,6 +97,7 @@ Only useful on desktop (not Chromebooks), so it waits until a Windows audience g
 - [x] Webhooks: `watch .price --webhook https://...` — POSTs each change as JSON (shipped in Pro)
 - [x] Query pipes: `extract table | where "price < 100" | sort -price` — SQL-style filtering over extracted rows (shipped in Pro)
 - [x] Crawl: `crawl table 10 | extract | to-csv` — multi-page collection over the site's own pagination, fetched with the session's cookies; the tab never navigates (shipped in Pro)
+- [x] Snapshots: `snap <sel>` baseline + row-paired change report on every later run (`~ Widget: $49.99 → $39.99`); `diff` compares read-only. Cron-friendly by design (shipped in Pro)
 
 ## Phase 5 — Scale (month 6+)
 
