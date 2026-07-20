@@ -43,7 +43,19 @@ content changes — even while you work in another window.
   rm .cookie-banner, .modal, .ad
 Remove banners, overlays and clutter from your view with one command.
 
-🆕 NEW IN 0.3 — WEBSHELL PRO (OPTIONAL)
+🆕 NEW IN 0.4 — THE SCRAPING SUITE (PRO)
+Your daily data-collection loop, end to end:
+  crawl table all | extract | where "price < 100" | sort -price | to-csv
+• crawl — every page of a paginated listing in one go; the tab never
+  navigates and it uses your logged-in session
+• where / sort — query any extracted table like a database
+• snap / diff — row-by-row "what changed since yesterday"
+  (~ Widget: $49.99 → $39.99)
+• macro — record a sequence of commands, replay it anywhere
+• cron — run any command on a timer, even with the tab closed
+• watch --webhook — POST changes to Slack, Zapier, n8n or your server
+
+🖥 WEBSHELL PRO — REAL SSH (OPTIONAL)
 Real SSH from inside your browser. Type ssh user@yourserver.com and get a
 full terminal — colors, vim, even your server's Powerlevel10k prompt —
 running on any device, Chromebooks included. Your session is end-to-end
@@ -63,7 +75,7 @@ ever leaves your machine. If you buy Pro, we only use your email (for
 the license) and relay your encrypted ssh traffic — we can't read it.
 Full policy: web-shell.app/privacy.html
 
-Press Alt+W on any page and type help to see all 28 commands.
+Press Alt+W on any page and type help to see every command.
 ```
 
 **ES:**
@@ -92,7 +104,19 @@ stock o cambie cualquier contenido — aunque estés en otra ventana.
   rm .cookie-banner, .modal, .ad
 Quita banners, overlays y estorbos de tu vista con un comando.
 
-🆕 NUEVO EN 0.3 — WEBSHELL PRO (OPCIONAL)
+🆕 NUEVO EN 0.4 — LA SUITE DE SCRAPING (PRO)
+Tu ciclo diario de recolección de datos, completo:
+  crawl table all | extract | where "precio < 100" | sort -precio | to-csv
+• crawl — todas las páginas de un listado paginado de una vez; la pestaña
+  nunca navega y usa tu sesión iniciada
+• where / sort — consulta cualquier tabla extraída como base de datos
+• snap / diff — qué cambió desde ayer, fila por fila
+  (~ Widget: $49.99 → $39.99)
+• macro — graba una secuencia de comandos y reprodúcela donde sea
+• cron — ejecuta cualquier comando con temporizador, aun con la pestaña cerrada
+• watch --webhook — envía los cambios a Slack, Zapier, n8n o tu servidor
+
+🖥 WEBSHELL PRO — SSH REAL (OPCIONAL)
 SSH real dentro de tu navegador. Escribe ssh usuario@tuservidor.com y
 tienes una terminal completa — colores, vim, hasta el prompt Powerlevel10k
 de tu servidor — en cualquier equipo, Chromebooks incluidos. Tu sesión va
@@ -114,7 +138,7 @@ datos nunca salen de tu máquina. Si compras Pro, solo usamos tu email
 (para la licencia) y transportamos tu tráfico ssh cifrado — no podemos
 leerlo. Política completa: web-shell.app/privacy.html
 
-Presiona Alt+W en cualquier página y escribe help para ver los 28 comandos.
+Presiona Alt+W en cualquier página y escribe help para ver todos los comandos.
 ```
 
 > The store has no changelog field: the "NEW IN 0.2" section above is part of
