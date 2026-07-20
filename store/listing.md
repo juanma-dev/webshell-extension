@@ -164,6 +164,18 @@ Presiona Alt+W en cualquier página y escribe help para ver todos los comandos.
   → "injects the terminal UI into the page the user invokes it on";
   `notifications` → "watch command alerts"; `storage` → "user preferences
   and the Pro license".
+- `alarms` (new in 0.4 — the dashboard blocks submission until justified):
+
+  > The alarms permission powers the user-created "cron" feature: a user can
+  > schedule one of their own saved commands (e.g., extract a table to CSV,
+  > or check a page's status) to run "every N minutes" or "daily at HH:MM".
+  > The extension's service worker creates exactly one chrome.alarms entry
+  > per schedule the user explicitly creates, and uses it to wake up, run
+  > the user's command on the page they chose, and show a desktop
+  > notification with the result. Alarms are only ever created by an
+  > explicit user command ("cron add"), are removed when the user deletes
+  > the schedule ("cron rm"), and are never used for tracking, analytics,
+  > or any background data collection.
 
 ### Privacy tab (dashboard) — updated for 0.3 / Pro
 
