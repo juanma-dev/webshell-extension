@@ -90,11 +90,11 @@ Only useful on desktop (not Chromebooks), so it waits until a Windows audience g
 
 ## Phase 4 — Differentiators (month 3+)
 
-- [ ] Macros: record clicks/inputs and replay them as an editable script
-- [ ] Scheduler: `cron "0 9 * * *" 'watch .price'` (alarms + service worker)
+- [x] Macros: `macro rec/run` — record command sequences and replay them (shipped in Pro; click/input recording still open)
+- [x] Scheduler: `cron add <name> every <N>m|daily <HH:MM> '<cmd>'` (alarms + service worker; shipped in Pro — `every`/`daily` instead of crontab syntax, deliberately)
 - [ ] Rust WASM module: high-volume parsing/regex for huge pages
 - [ ] AI layer: natural language → command (`"get all the emails"`)
-- [ ] Webhooks: `watch .price --webhook https://...`
+- [x] Webhooks: `watch .price --webhook https://...` — POSTs each change as JSON (shipped in Pro)
 
 ## Phase 5 — Scale (month 6+)
 

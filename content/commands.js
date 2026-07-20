@@ -506,13 +506,14 @@
     const list = Array.from(watchers.values()).map((w) => ({
       selector: w.selector,
       secs: w.secs,
+      webhook: w.webhook || null,
     }));
     WS.store.set(WS.hostKey("watches"), list);
   }
 
   /** Starts a watch loop. Prints into whatever terminal exists when it fires,
       so watches restored on page load work before the terminal is ever opened. */
-  function startWatch(selector, secs) {
+  function startWatch(selector, secs, webhook) {
     const read = () =>
       WS.query(selector).map((el) => el.textContent.trim()).join("\n");
 
@@ -536,11 +537,17 @@
             message: msg,
           });
         } catch {}
+        // Pro build: also deliver the change to this watch's webhook.
+        if (webhook && WS.proWatchWebhook) {
+          try {
+            WS.proWatchWebhook.fire({ id, selector, webhook }, last, now);
+          } catch {}
+        }
         last = now;
       }
     }, secs * 1000);
 
-    watchers.set(id, { selector, secs, timer });
+    watchers.set(id, { selector, secs, timer, webhook: webhook || null });
     return id;
   }
 
@@ -550,7 +557,11 @@
     if (!Array.isArray(list)) return 0;
     for (const w of list) {
       if (w && typeof w.selector === "string") {
-        startWatch(w.selector, Math.max(1, Number(w.secs) || 5));
+        startWatch(
+          w.selector,
+          Math.max(1, Number(w.secs) || 5),
+          typeof w.webhook === "string" ? w.webhook : null
+        );
       }
     }
     return list.length;
@@ -559,10 +570,13 @@
   commands.watch = {
     desc: "watch a selector and notify when its text changes (persists across reloads)",
     usage: "watch <selector> [seconds=5]   ·   watch ls   ·   watch rm <id|all>",
-    fn(args, _input, term) {
+    async fn(args, _input, term) {
       if (args[0] === "ls") {
         if (!watchers.size) term.print("no active watches");
-        for (const [id, w] of watchers) term.print(`[${id}] ${w.selector} (every ${w.secs}s)`);
+        for (const [id, w] of watchers)
+          term.print(
+            `[${id}] ${w.selector} (every ${w.secs}s)${w.webhook ? ` → ${w.webhook}` : ""}`
+          );
         return [];
       }
       if (args[0] === "rm") {
@@ -582,15 +596,33 @@
         term.print(`watch [${id}] stopped`);
         return [];
       }
-      if (!args[0]) throw new Error("watch: usage: watch <selector> [seconds]");
+      // --webhook <url> (Pro build) POSTs each change to that URL. The flag's
+      // validation/licensing lives in the Pro overlay (WS.proWatchWebhook);
+      // this build only knows how to carry the value on the watch.
+      let webhook = null;
+      const rest = [];
+      for (let i = 0; i < args.length; i++) {
+        if (args[i] === "--webhook") {
+          const url = args[++i];
+          if (!url) throw new Error("watch: usage: watch <selector> [seconds] --webhook <url>");
+          if (!WS.proWatchWebhook)
+            throw new Error("watch: --webhook is available in the WebShell Pro build");
+          webhook = await WS.proWatchWebhook.add(url, term);
+          if (webhook === null) return []; // not licensed — upsell already printed
+        } else {
+          rest.push(args[i]);
+        }
+      }
 
-      const selector = args[0];
-      const secs = Math.max(1, Number(args[1]) || 5);
+      if (!rest[0]) throw new Error("watch: usage: watch <selector> [seconds]");
+
+      const selector = rest[0];
+      const secs = Math.max(1, Number(rest[1]) || 5);
       WS.query(selector); // validate the selector before persisting it
-      const id = startWatch(selector, secs);
+      const id = startWatch(selector, secs, webhook);
       saveWatches();
       term.print(
-        `watch [${id}] active: "${selector}" every ${secs}s — persists on this site (stop: watch rm ${id})`
+        `watch [${id}] active: "${selector}" every ${secs}s${webhook ? " → webhook" : ""} — persists on this site (stop: watch rm ${id})`
       );
       return [];
     },
