@@ -157,7 +157,13 @@
             `Many sites draw tables with <div>; inspect with: ls ${args[0] || "table"}`
         );
       }
-      const rows = els.flatMap((el) => WS.extract(el));
+      let rows = els.flatMap((el) => WS.extract(el));
+      // Several tables (e.g. crawled pages) repeat the same header row — keep
+      // only the first copy so to-csv / where see a single header.
+      if (els.length > 1 && rows.length > 1) {
+        const header = JSON.stringify(rows[0]);
+        rows = rows.filter((r, i) => i === 0 || JSON.stringify(r) !== header);
+      }
       rows.slice(0, 20).forEach((r) => term.print(r.join(" | ")));
       if (rows.length > 20) term.print(`… and ${rows.length - 20} more row(s)`);
       term.print(`${rows.length} row(s) extracted`);
